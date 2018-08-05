@@ -2,7 +2,7 @@
 layout: post
 title: hyperledger-fabric-ca用户指南(1.0)
 date: 2018-06-05
-updated: 2018-08-03
+modified: 2018-08-03
 categories: 
 - hyperledger
 - fabric
