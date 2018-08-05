@@ -26,6 +26,7 @@ hyperledger fabric ca是一个对hyperledger fabric进行用户授权的组件.
 Hyperledger fabric ca 包含服务端和一个客户端, 下文将会描述.
 
 对于贡献Hyperledger fabric ca 的开发者, 可以查看 [fabric ca 仓库](https://github.com/hyperledger/fabric-ca)来查询更多信息.
+<!-- more -->
 
 # 1. 概览
 下图展示了如何把hyperledger fabric ca 服务器放在hyperledger fabric 的整体架构中.

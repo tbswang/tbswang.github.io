@@ -8,6 +8,8 @@ date: 2017-12-03
 ## 1. Abstract
 本文介绍软件测试中经典问题nextdate的延伸--nextNDate, 以及记录使用nodejs引入mocha单元测试模块, 并且使用istanbul输出测试用例的覆盖率.其中测试用例又excel表格给出.
 
+<!-- more -->
+
 ## 2. 前置知识
 * 软件测试理论
 * js基础语法
@@ -23,7 +25,7 @@ nextdate问题是指,给出一个日期date, 可以得到第二天的日期. 而
 另外, 在javascript中可以使用内置的date类型来实现加减天数, 只需要在date中加减24\*60\*60\*1000就可以.[[4]](http://yuanliyin.iteye.com/blog/653456)但是date类型数据没有对1582的时间进行处理.
 
 实现的思路是, 根据N的正负, 分别调用afterNDate和beforeNDate. 对于afterNDate, 再去调用afterDate. 在afterDate里面, 将输入的date的与这个月的天数进行比较, 来判断是不是要把月份进位或者年份进位;这个月的天数无外乎31, 30, 28, 29这几种情况, 使用一个分支语句就可以简单的得到.对于beforeNDate同样的处理. 详细可以看代码.[[5]](https://github.com/gt2017/nextNDate)和下面的流程图.
-![img](/assets/images/attachment/2017-12-04-mocha-istanbul/flow_chart.png)
+![img](flow_chart.png)
 
 ### 3.2 使用mocha进行单元测试
 mocha使用的很简单, 读一下阮大大的博客[[6]](http://www.ruanyifeng.com/blog/2015/12/a-mocha-tutorial-of-examples.html),把里面的demo实现一下就可以.
