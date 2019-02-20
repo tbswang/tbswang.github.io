@@ -7,7 +7,7 @@ title: tbswang's blogs
 subtitle:
 description: 前端 计算机技术
 keywords:
-author: gt2017
+author: tbswang
 language:
 timezone:
 
@@ -80,7 +80,7 @@ theme: hexo-theme-next-5.1.4
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git 
-  repo: https://github.com/gt2017/gt2017.github.io.git
+  repo: https://github.com/tbswang/tbswang.github.io.git
   branch: master
 
 search:

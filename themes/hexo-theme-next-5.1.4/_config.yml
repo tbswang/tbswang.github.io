@@ -361,7 +361,7 @@ han: false
 # Disqus
 disqus:
   enable: true
-  shortname: gt2017
+  shortname: tbswang
   count: true
 
 # Hypercomments
