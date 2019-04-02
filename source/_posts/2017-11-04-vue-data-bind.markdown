@@ -1,6 +1,6 @@
 ---
 layout: post
-title: vue双向绑定原理
+title: test
 date: 2017-11-04 
 ---
 
