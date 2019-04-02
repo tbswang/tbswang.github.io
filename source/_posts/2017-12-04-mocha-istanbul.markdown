@@ -2,6 +2,11 @@
 layout: post
 title: nodejs使用mocha输出测试结果和使用istanbul输出覆盖率
 date: 2017-12-03 
+categories: 
+- 测试
+
+tags:
+- 
 ---
 
 
