@@ -17,7 +17,7 @@ tags:
 vue的Virtual DOM是基于snabbdom。所以，要了解vue，先了解snabbdom也有必要。
 
 ## 3. 环境配置
-这一部分其实是本文的重点。因为snabbdom的开发年代相距想在（2019-04）比较久远。而且snabbdom是用typescript开发的，比JavaScript的上手难度要大一点。
+这一部分其实是本文的重点。因为snabbdom的开发年代相距想在（2019.04）比较久远。而且snabbdom是用typescript开发的，比JavaScript的上手难度要大一点。
 ### 3.1 配置babel
 babel是一个代码转换工具，不同的版本各有差异。如果直接使用现在的版本，编译之前的代码，会有莫名其妙的错误，所以考虑使用使用sanbbdom时代的babel
 ```
