@@ -1,7 +1,7 @@
 ---
 title: 使用docker构建统一的开发环境
 date: 2019-07-17 09:17:34
-tags:
+tags: docker
 ---
 
 ## abstract
