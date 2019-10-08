@@ -51,3 +51,13 @@ tags:
     `git reset /path/to/file`
     `rm /path/to/file`
     `git commit`
+
+- 在本地和远程分别建立代码库之后，添加远程库
+```bash
+    git remote add origin <remote url>
+    git push -u origin master
+```
+- git的密码更换
+```bash
+    git config --system --unset credential.helper
+```
