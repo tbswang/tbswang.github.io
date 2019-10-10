@@ -55,9 +55,11 @@ tags:
 - 在本地和远程分别建立代码库之后，添加远程库
 ```bash
     git remote add origin <remote url>
-    git push -u origin master
+    git push -u origin master # -u 表示当前将origin的master设置为本地分之的跟踪分支
 ```
 - git的密码更换
 ```bash
-    git config --system --unset credential.helper
+    git config --system --unset credential.helper # 清除http的用户名和密码
+    git fetch # 随便一个与远程交互命令都可以
+    git config credential.helper store # 用户名密码明文存储在～/.git-crendential文件中。http://<username>:<password>@<git的url>
 ```
