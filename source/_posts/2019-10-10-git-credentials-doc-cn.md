@@ -1,5 +1,5 @@
 ---
-title: git-credentials-doc-cn
+title: git-credentials中文文档
 tags:
   - 翻译
   - git

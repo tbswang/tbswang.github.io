@@ -28,7 +28,7 @@ Hyperledger fabric ca 包含服务端和一个客户端, 下文将会描述.
 对于贡献Hyperledger fabric ca 的开发者, 可以查看 [fabric ca 仓库](https://github.com/hyperledger/fabric-ca)来查询更多信息.
 <!-- more -->
 
-# 1. 概览
+# 概览
 下图展示了如何把hyperledger fabric ca 服务器放在hyperledger fabric 的整体架构中.
 
 ![img](./fabric-ca-arch.png) 
@@ -41,11 +41,11 @@ Hyperledger fabric ca 包含服务端和一个客户端, 下文将会描述.
 
  每个服务器可能包含多个ca.每个ca要么是根ca,要么是中间ca.每个中间ca的父节点要么是根ca,要么是一个中间ca.
 
-# 2. 开始
+# 开始
 
-## 2.1 预安装
+## 预安装
 
-* go 1.7.x 安装
+* go.x 安装
 * 正确设置环境变量 `GOPATH`
 * 安装libtool 和libtdhl-dev 安装包
 
@@ -74,7 +74,7 @@ brew install libtool
 https://www.gnu.org/software/libtool/manual/html_node/Using-libltdl.html
 
 
-## 2.2 安装
+## 安装
 
 下面的命令会在会在$GOPATH/bin中安装fabric-ca-server和fabric-ca-client的二进制文件.
 ```
@@ -102,7 +102,7 @@ If you wish to set tracking information for this branch you can do so with:
 package github.com/hyperledger/fabric-ca/cmd/fabric-ca-client: exit status 1
 ```
 
-## 2.3 启动原生的服务器
+## 启动原生的服务器
 这个命令使用默认配置,其中fabric-ca-server
 ```bash
 fabric-ca-server start -b admin:adminpw
@@ -115,8 +115,8 @@ fabric-ca-server start -b admin:adminpw
 
 >  注释: 创建的fabric-ca的配置文件一般会在/etc/hyperledger/fabric-ca-server
 
-## 2.4 使用docker
-### 2.4.1 docker hub
+## 使用docker
+### docker hub
 在 https://hub.docker.com/r/hyperledger/fabric-ca/tags/ 这个网页找到合适的架构和版本的镜像
 
 在$GOPATH/src/github.com/hyperledger/fabric-ca/docker/server 打开docker-compose.yml文件.
@@ -145,7 +145,7 @@ docker-compose up -d
 
 如果指定的fabric-ca镜像不存在, 这会从docker拉取(pull)镜像, 然后开启一个fabric-ca 的服务器的实例.
 
-### 2.4.2 生成自己的docker镜像
+### 生成自己的docker镜像
 你可以使用下面的命令, 通过docker-compose 来启动服务器.
 ```bash
 cd $GOPATH/src/github.com/hyperledger/fabric-ca
@@ -163,7 +163,7 @@ hyperledger/fabric-ca的docker镜像包含了fabric-ca-server和fabric-ca-client
 ```
 
 
-## 2.5 浏览cli命令
+## 浏览cli命令
 这一部分只是简单说明fabric ca 服务端和客户端的使用信息.另外的使用信息在接下来的部分中.
 
 > 注释:
@@ -171,19 +171,19 @@ hyperledger/fabric-ca的docker镜像包含了fabric-ca-server和fabric-ca-client
 
 >  说明: 使用字符串分割的命令行选项可以使用逗号分隔符来指定多个命令, 或者多次指定这个选项,每个字符串值来组成一个列表.比如, 为了给csr.host指定host1和host2,你可以传递参数 --csr.host 'host1,host2' 或者 -csr.host host1 --csr.host host2. 当使用第一种的时候, 确保在逗号的前面和后面都没有空格.
 
-# 3. 文件格式
-## 3.1 fabric ca服务器端的配置文件的格式
+# 文件格式
+## fabric ca服务器端的配置文件的格式
 在fabric-ca启动的时候,会在服务端的主目录创建一份默认配置文件.
 
 > 注释: 这部分内容查看原文件https://hyperledger-fabric-ca.readthedocs.io/en/release-1.0/users-guide.html#fabric-ca-server-s-configuration-file-format
 
-## 3.2 ca 客户端的配置文件的格式
+## ca 客户端的配置文件的格式
 在client端的主目录会创建一份默认的配置文件
 
 > 注释: 这部分内容查看原文件https://hyperledger-fabric-ca.readthedocs.io/en/release-1.0/users-guide.html#fabric-ca-server-s-configuration-file-format
 
 
-# 4.配置文件生效的优先级
+# 配置文件生效的优先级
 fabric ca提供三种方式来设置fabric ca 服务端和客户端.优先级如下:
 1. 命令行里面的参数设置
 1. 环境变量
@@ -218,7 +218,7 @@ fabric-ca-client enroll --tls.client.certfile cert3.pem
 
 同样的方式也适用于fabric-ca-server,除了把环境变量前缀从`FABRIC_CA_CLIENT`改成`FARBIC_CA_SERVER`.
 
-# 5 关于文件路径的说明
+# 关于文件路径的说明
 所有在fabric ca 服务端和客户端的配置文件中关于文件名字的属性,都可以支持相对路径和绝对路径.相对路径是相对于配置文件所在的配置目录.例如, 如果配置文件是在 `~/config`中,, tls的设置下面所示,那么fabric ca 服务端和客户端会在`~/config`目录中查找root.pem, 在`~/config/certs` 这个目录中查找cert.pem, 使用绝对路径在`/abs/path`中查找key.pem
 
 ```yml
@@ -231,7 +231,7 @@ tls:
     keyfile: /abs/path/key.pem
 ```
 
-# 6.fabric ca 服务器端
+# fabric ca 服务器端
 可以在启动fabric ca 服务器之前初始化,这样就可以在启动服务器之前生成一个服务器的默认配置文件,可以查看和修改.
 
 ca的主文录由下面决定:
@@ -244,7 +244,7 @@ ca的主文录由下面决定:
 
 下面的介绍中, 假设服务器端配置文件已经在服务器的主目录中存在.
 
-## 6.1 初始化服务器端
+## 初始化服务器端
 使用如下命令初始化fabric ca 服务器:
 ```
 fabric-ca-server init -b admin:adminpw
@@ -290,7 +290,7 @@ fabric-ca-server会产生一个自签名的ca证书,除非在指定了 -u <paren
 
 如果想要用自己的ca签名证书, 必须把你的文件放到相应的ca.certfile和ca.keyfile文件中.两个文件必须是PEM编码, 而且不能加密.而且, 这个ca证书文件必须又`-----BEGIN CERTIFICATE-----`开始,秘钥的内容必须`-----BEGIN PRIVATE KEY-----`开始, 而不能是 `-----BEGIN ENCRYPTED PRIVATE KEY-----`
 
-### 6.1.1 算法和key的大小
+### 算法和key的大小
 csr部分可以自定义来生成x.509格式的椭圆曲线法生成的证书和秘钥(ECDSA).下面的设置是一个椭圆曲线法的实现的例子, 使用曲线 prime256v1和签名算法 ecdsa-with-SHA256:
 ```
 key:
@@ -309,7 +309,7 @@ key:
 
 
 
-## 6.2 开启服务器
+## 开启服务器
 使用如下命令开启服务器:
 ```bash
 fabric-ca-server start -b <admin>:<adminpw>
@@ -325,14 +325,14 @@ fabric-ca-server start -b <admin>:<adminpw>
 
 fabric-ca-server监听在7054端口
 
-## 6.3 配置数据库
+## 配置数据库
 这一部分描述如何配置连接PostgreSQL or MySQL数据库.默认的数据库是sqlite,默认的数据库文件是fabric-server.db,在home文件夹.
 
 如果不关心在集群中运行服务器,可以跳过这一部分.支持的数据库版本
-* PostgreSQL: 9.5.5 或者之后
-* MySQL: 5.7.16 或者之后
+* PostgreSQL:.5 或者之后
+* MySQL:.16 或者之后
 
-### 6.3.1 postgresql
+### postgresql
 在server的配置文件中,增加下面的部分,可以连接到postgresql中.确认好要把下面自定义的值合适.关于db名字的有字符的限制.参考这个文件https://www.postgresql.org/docs/current/static/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS
 
 ```
@@ -364,7 +364,7 @@ db:
 certfiles: 一系列经过pem编码的可信 的根证书文件
 certfile和keyfile: 由pem编码的,由fabric ca 的服务器用来和postgresql服务器安全交流的
 
-#### 6.3.1.1 postgresql的ssl配置
+#### postgresql的ssl配置
 ##### 在postgresql服务器中配置ssl的基本介绍
 
 1. 在postgresql.conf中,取消注释ssl,设置为on(ssl=on)
@@ -381,7 +381,7 @@ certfile和keyfile: 由pem编码的,由fabric ca 的服务器用来和postgresql
 
 更多细节可以查看postgresql的文档:https://www.postgresql.org/docs/9.4/static/libpq-ssl.html
 
-### 6.3.2 mysql
+### mysql
 下面的例子可以加入到fabric ca server的配置文件中,用来连接db.确认好要把下面自定义的值合适.关于db名字的有字符的限制.使用这个文件 https://dev.mysql.com/doc/refman/5.7/en/identifiers.html 来查看更详细的描述.
 
 在5.7.x中,某些模式决定 '0000-00-00' 是否为一个合法的日期.需要允许这个使用.我们想允许server接收0 值的日期.
@@ -461,7 +461,7 @@ volumes:
 
 >在配置ldap之后,users表的功能就被ldap替代,所以users表空闲.
 
-#### 6.3.2.1 mysql的ssl设置.
+#### mysql的ssl设置.
 基本介绍
 
 1. 打开或者新建一个my.cnf在server中.在mysqld下面,增加或者解除注释.这应该指向了server的key或者证书,和根root证书.
@@ -483,7 +483,7 @@ mysql> GRANT ALL PRIVILEGES ON . TO ‘ssluser’@’%’ IDENTIFIED BY ‘passw
 ```
 如果你特定ip可以访问, 把%改成你的ip
 
-#### 6.3.2.2 mysql 服务端-需要客户端证书
+#### mysql 服务端-需要客户端证书
 安全连接的配置和其他服务端的配置类似.
 
 * ssl-ca: 指明用户授权的证书.如果使用这个选项, 必须在fabric-ca服务端使用相同的证书.
@@ -590,7 +590,7 @@ docker inspect [容器名字] | grep IPAddress
 ```
 
 
-## 6.4 配置ldap
+## 配置ldap
 fabric ca服务端也可以配置为从ldap服务器读取.
 
 特别是,fabric ca连接到ldap后做以下的事情:
@@ -693,7 +693,7 @@ docker exec fabric_ca_openldap ldappasswd -xD cn=admin,dc=example,dc=org -w admi
 ![](jsmith-cert.png)
 
 
-## 6.5 配置集群
+## 配置集群
 你可能会用ip sprayer来对一个ca集群做负载均衡.本部分提供一个例子, 如何设置haproxy作为一个ca服务集群的路由.确定把hostname和端口设置到与ca服务器相符.
 
 haproxy.conf的配置:
@@ -784,10 +784,10 @@ listen status
 
 ![](haproxy-stats-after.png)
 
-## 6.6 设置多个ca
+## 设置多个ca
 每个ca服务器默认包含一个ca.然而, 可以使用cafiles或者cacount配置选项来向一个ca服务器中增加多个ca.每个增加的ca都有自己的主目录.
 
-### 6.6.1 cacout:
+### cacout:
 cacout提供了一种快速x个ca的方案.他的主目录与服务器的主目录相关.当开启这个选项,目录结构如图:
 ```
 --<Server Home>
@@ -801,7 +801,7 @@ cacout提供了一种快速x个ca的方案.他的主目录与服务器的主目�
 ```
 fabric-ca-server start -b admin:adminpw --cacount 2
 ```
-### 6.6.2 cafiles:
+### cafiles:
 在使用cafile配置选项的时候, 没有提供绝对路径,那么ca的目录就是相对于服务器的目录.
 
 为了使用这个选项,必须事先生成ca的配置文件,并且每个将要开启的ca配置好.每个配置文件必须有一个唯一的ca名字和一个common name, 否则就会开启失败, 因为名字必须唯一.ca的配置文件会覆盖所有的ca默认配置文件, 任何在ca配置文件中缺失的选项将会使用ca 的默认值来替换.
@@ -838,7 +838,7 @@ fabric-ca-server start -b admin:adminpw --cafiles ca/ca1/fabric-ca-config.yaml -
 ```
 
 
-## 6.7 登录一个中间ca
+## 登录一个中间ca
 为了给一个中间ca创建一个签名证书,这个中间ca必须向一个父级ca登录,与一个fabric-ca 客户端登录的方式相同.这个可以类似下面展示的方式, 使用-u选项来指定父级的ca的URL,登录的id和密码.这个登录id的用户必须有一个名为"hr.IntermediateCA"的属性,它的值是`true`.颁发的证书的CN(common name)设置为登录id.如果一个中间ca指定名字, 会发生错误.
 
 ```bash
@@ -848,7 +848,7 @@ fabric-ca-server start -b admin:adminpw -u http://<enrollmentID>:<secret>@<paren
 更多关于中间ca的标记可以查看https://hyperledger-fabric-ca.readthedocs.io/en/release-1.0/users-guide.html#fabric-ca-server-s-configuration-file-format
 
 
-# 7 fabric ca 客户端
+# fabric ca 客户端
 
 这一部分描述如何使用fabric-ca客户端命令.
 
@@ -860,7 +860,7 @@ fabric-ca的客户端的主目录有以下的顺序决定:
 
 下面的介绍假定客户端的配置文件存在于客户端的主目录中.
 
-## 7.1 登录启动实体
+## 登录启动实体
 首先, 如果需要, 要在client的配置文件中, 自定义csr部分.注意: csr.cn部分必须是启动实体的id.以下是默认的csr值:
 ```
 csr:
@@ -905,7 +905,7 @@ fabric-ca-client enroll -u http://admin:adminpw@localhost:7054
 >登录一个用户的过程是这样的: client端生成一份私钥,存在`$FABRIC_CA_CLIENT_HOME/msp/keystore`.比方说amin登录就需要指定为amin的值.当然这个值也可以按照上面的规则用环境变量或者命令行参数覆盖.接着,向服务端发起请求.服务端的返回发证机构的一个证书,放在文件夹`$FABRIC_CA_CLIENT_HOME/msp/cacerts `中,命名为上面请求的`{hostname}-{port}.pem`,这个证书实际上就是fabric-ca服务端的发证机构的证书,也就是服务端的`/etc/hyperledger/fabric-ca-server-config/org1.example.com-cert.pem`这个文件.还有一个是fabric-ca服务端给客户端的证书`$FABRIC_CA_CLIENT_HOME/msp/signcerts/cert.pem `,会存放在这个证书是在issure是fabric-ca服务端,subject(证书持有者)是admin用户.
 ![](ca-client-admin-cert.png)
 
-## 7.2 注册一个新的用户
+## 注册一个新的用户
 执行注册的身份必须已经登录,也必须要有相应的权限来注册这种类型的用户.
 
 通常, 在fabric ca server注册期间会实行两个授权检查:
@@ -974,7 +974,7 @@ fabric-ca-client register --id.name peer1 --id.type peer --id.affiliation org1.d
 
 ![](user-table-peer-reg.png)
 
-## 7.3 注册peer用户
+## 注册peer用户
 既然已经注册peer用户, 可以使用给定的enrollment ID和密码enroll.这个与enroll启动身份很相似,除了我们演示的用-m 选项来指定hyperledger fabric msp部分的目录结构.
 
 以下的命令enroll peer1.确认要把-m中的目录指定到自己的peer 的msp目录中, msp路径在peer的core.yaml文件中.你也可以设置FABRIC_CA_CLIENT_HOME.
@@ -991,7 +991,7 @@ fabric-ca-client enroll -u http://peer1:peer1pw@localhost:7054 -M $FABRIC_CA_CLI
  一份默认的配置文件,就是`/root/fabric-ca/clients/peer1/fabric-ca-client-config.yaml`,通过读取配置中`csr.cn`的值,指定登录的身份,当然,在这里只能为admin,而不能是其他用户,因为只有admin的属性中带有了注册其他角色的权限(可以查看user表中的attribute字段).服务端返回的响应是给peer1用户的一个证书.可以看出发证机构是`ca.org1.example.com`,而证书的持有者就是`peer1`
 ![](peer1-cert.png)
 
-## 7.4 从另一个ca服务器获得一个ca证书
+## 从另一个ca服务器获得一个ca证书
 通常，MSP目录的cacerts目录必须包含其他证书颁发机构的证书颁发机构链，代表所有peer节点的所有信任根。
 
 `fabric-ca-client getcacerts`这个命令可以获取从其他fabric-ca服务器的证书链.
@@ -1008,7 +1008,7 @@ export FABRIC_CA_CLIENT_HOME=$HOME/fabric-ca/clients/peer1
 fabric-ca-client getcacert -u http://localhost:7055 -M $FABRIC_CA_CLIENT_HOME/msp
 ```
 
-## 7.5 重新enroll一个实体
+## 重新enroll一个实体
 假如你的证书要过期或者撤销,可以使用下面的命令更新证书.
 
 ```
@@ -1018,7 +1018,7 @@ fabric-ca-client reenroll
 > 结果如图所示:
 ![](reenroll.png)
 
-## 7.6 撤销一个证书
+## 撤销一个证书
 一个实体或者证书都是可以撤销的.撤销一个实体会撤销这个实体所拥有的所有证书,并且会阻止这个实体获取新的证书.撤销证书只是让证书失效
 
 为了撤销证书, 实体必须要有hrRevoke属性.撤销身份只能撤销证书或身份，其身份与撤销身份的隶属关系相同或以前缀为准。例如,具有隶属关系orgs.org1的撤销者可以撤销与orgs.org1或orgs.org1.department1相关联的身份，但不能撤销与orgs.org2相关的身份。
@@ -1059,7 +1059,7 @@ serial=$(openssl x509 -in userecert.pem -serial -noout | cut -d "=" -f 2)
 aki=$(openssl x509 -in userecert.pem -text | awk '/keyid/ {gsub(/ *keyid:|:/,"",$1);print tolower($0)}')
 fabric-ca-client revoke -s $serial -a $aki -r affiliationchange
 ```
-## 7.7 使用tls
+## 使用tls
 以下可以在 fabric-ca-client-config.yaml 中配置
 ```
 tls:
@@ -1075,13 +1075,13 @@ tls:
 
 只有服务端配置了tls, 才需要在客户端配置
 
-## 7.8 联系指定的ca实例
+## 联系指定的ca实例
 等运行在一个服务器上多个ca,可以指定ca.默认,如果ca的名字没有在客户端的请求中指定,就会请求fabric-ca服务端的默认ca.一个ca 的名字可以客户端的命令行中指定
 ```
 fabric-ca-client enroll -u http://admin:adminpw@localhost:7054 --caname <caname>
 ```
 
-# 8 相关资料
+# 相关资料
 1. 在2018-7, fabric更新到了1.2.[文档](https://hyperledger-fabric-ca.readthedocs.io/en/release-1.2/users-guide.html)也更加丰富,更加人性化.建议先去看一下.
 
 1. 之前的中文翻译文档:https://hyperledgercn.github.io/hyperledgerDocs/

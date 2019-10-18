@@ -10,13 +10,13 @@ tags:
     const chain = compose(a,b,c)
     chain();
 ```
-## 1. 思路
+## 思路
 <!-- more -->
 我们有一组函数a,b,c，要变成依次调用，只需要a(b(c()))就可以。
 
 但是，如果有多个函数，总不能光明正大的写出来调用吧。在js中可以通过将函数作为一个参数传递，毕竟回调函数。我们能不能把这一组函数变成a(b())的形式。
 
-### 1.1 reduce的执行顺序
+### reduce的执行顺序
 
 reduce函数，原意是用在数组中，将之前的返回的结果作为下次的运行的参数。以mdn的例子([https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce#reduce()_如何运行](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce#reduce()_%E5%A6%82%E4%BD%95%E8%BF%90%E8%A1%8C))
 ```js
@@ -75,7 +75,7 @@ reduce的执行是给定一个函数，将所有的元素传入这个函数，�
 
 可以看出是第一次没有返回值导致的错误。所以关键是在这个执行的函数中。
 
-### 1.2 函数闭包
+### 函数闭包
 
 上面的问题主要有
 
@@ -98,7 +98,7 @@ reduce的执行是给定一个函数，将所有的元素传入这个函数，�
 ```
 4. 最后执行一次chain()就万事大吉。
 
-### 1.3 内存泄漏
+### 内存泄漏
 
 既然使用闭包，就会有内存泄露的风险。
 
@@ -106,7 +106,7 @@ reduce的执行是给定一个函数，将所有的元素传入这个函数，�
 
 一般v8中的stack的大小为1M左右。根据每个函数的占用字节，就可以算出一共多少函数。
 
-## 2. reduce里面发生了啥
+## reduce里面发生了啥
 
 reduce是一次函数遍历。我们可以通过他的pollyfill来大致了解一下[https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce#Polyfill](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce#Polyfill)
 ```js
@@ -120,7 +120,7 @@ reduce是一次函数遍历。我们可以通过他的pollyfill来大致了解�
 ```
 比较关键的几行就是这里。将数组里面所有元素遍历，然后每次执行的结果记住，最后将结果返回。
 
-## 3. 实际使用
+## 实际使用
 
 前文就是理清reduce中的执行过程。那么在实际使用中还要哪些呢？
 

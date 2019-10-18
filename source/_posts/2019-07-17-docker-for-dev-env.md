@@ -8,7 +8,7 @@ tags: docker
 
 把要使用的软件通过dockerfile打包成一个镜像，托管到自己的registry中，这样就可以在任意别地方使用了。
 <!-- more -->
-## 1. 步骤
+## 步骤
 
 - 安装docker
 - 使用如下的dockerfile
@@ -29,7 +29,7 @@ tags: docker
 ```dockerfile
     docker build -t tbswang-dev-env:0.0.1 . # t表示镜像名称，版本号 .是指当前路径中的dockerfile
 ```
-## 2. docker中常用命令
+## docker中常用命令
 
 - 拉取一个docker命令
 ```dockerfile
@@ -39,7 +39,7 @@ tags: docker
 ```dockerfile
     docker run -d -it --name my-ubuntu -v $(pwd):/root ubuntu /bin/bash # v后面是挂在路径，前面是主机路径，后面是docker容器内的路径
 ```
-## 3. 目前存在的问题
+## 目前存在的问题
 
 1. 打包出的镜像将近300m。比较大
 2. run的时候执行
