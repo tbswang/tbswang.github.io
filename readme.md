@@ -11,5 +11,5 @@
 * 执行 `hexo server`, 可以在本地预览效果
 * 执行 `hexo generate`,本地生成网页文件.
 * 部署:`hexo deploy` 会将生成好的文件自动推送到github的origin master分支
-* 最后, 把hexo分支推送到origin hexo 分支: 'git push origin hexo'
+* 最后, 把hexo分支推送到origin hexo 分支: `git push origin hexo`
 * 在整个过程中, 都不需要处理master分支.

@@ -63,3 +63,13 @@ tags:
     git fetch # 随便一个与远程交互命令都可以
     git config credential.helper store # 用户名密码明文存储在～/.git-crendential文件中。http://<username>:<password>@<git的url>
 ```
+- 删除远程地址
+```bash
+    git remote -v
+    # View current remotes
+    > origin  https://github.com/OWNER/REPOSITORY.git (fetch)
+    > origin  https://github.com/OWNER/REPOSITORY.git (push)
+    > destination  https://github.com/FORKER/REPOSITORY.git (fetch)
+    > destination  https://github.com/FORKER/REPOSITORY.git (push)
+    git remote rm destination
+```
