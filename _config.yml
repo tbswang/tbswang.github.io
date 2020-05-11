@@ -80,7 +80,7 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git 
-  repo: git@github.com:tbswang/tbswang.github.io.git
+  repo: https://github.com/tbswang/tbswang.github.io.git
   branch: master
 
 search:
