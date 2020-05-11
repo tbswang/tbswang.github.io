@@ -1,5 +1,5 @@
 ---
-title: common-bash-command
+title: 常用的bash命令
 date: 2020-04-29 18:05:52
 tags:
   - bash
