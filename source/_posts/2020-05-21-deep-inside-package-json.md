@@ -1,8 +1,10 @@
 ---
 title: 深入了解package.json
 tags:
- - npm
+  - npm
+date: 2020-05-21 15:10:06
 ---
+
 
 描述
 package.json文件是一个json文件,不是一个js对象字面量.
