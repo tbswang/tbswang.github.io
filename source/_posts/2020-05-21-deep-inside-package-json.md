@@ -2,14 +2,18 @@
 title: 深入了解package.json
 tags:
   - npm
+  - 翻译
 date: 2020-05-21 15:10:06
 ---
 
+原文: https://docs.npmjs.com/files/package.json
 
 描述
 package.json文件是一个json文件,不是一个js对象字面量.
 
 > 下面是各个字段的介绍
+
+<!-- more -->
 
 ## name
 
