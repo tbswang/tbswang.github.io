@@ -73,3 +73,17 @@ tags:
     > destination  https://github.com/FORKER/REPOSITORY.git (push)
     git remote rm destination
 ```
+- [合并commit](https://segmentfault.com/a/1190000007748862)
+1. 挑选commit记录
+```
+git rebase -i HEAD~3
+或者
+git rebase -i [commit id] # 这个commit id不参与合并
+```
+2. 弹出vim窗口,留下的commit不用动,不想要的就加一个*pick改为squash或者s*
+3. 保存退出.解决冲突,然后
+```
+git add .  
+
+git rebase --continue  
+```
