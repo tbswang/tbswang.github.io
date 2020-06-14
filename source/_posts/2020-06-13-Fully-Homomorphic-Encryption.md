@@ -3,7 +3,7 @@ title: Fully-Homomorphic-Encryption
 date: 2020-06-13 19:58:43
 tags:
 ---
-原文: 
+原文: https://www.ibm.com/blogs/research/2020/06/ibm-releases-fully-homomorphic-encryption-toolkit-for-macos-and-ios-linux-and-android-coming-soon/
 
 通常,当我和别人解释全同态加密的时候,我就说,虽然我已经在这个领域工作了将近十年, 但我也必须停下来拼出来.所以,让我们就简单的把它叫做FHE.
 
