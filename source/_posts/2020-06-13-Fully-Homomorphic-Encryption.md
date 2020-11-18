@@ -2,6 +2,7 @@
 title: Fully-Homomorphic-Encryption
 date: 2020-06-13 19:58:43
 tags:
+  - 翻译
 ---
 原文: https://www.ibm.com/blogs/research/2020/06/ibm-releases-fully-homomorphic-encryption-toolkit-for-macos-and-ios-linux-and-android-coming-soon/
 

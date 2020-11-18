@@ -36,10 +36,22 @@ WebAssembly文档重点介绍了几种预期的用例[7]，包括科学内核，
 
 不幸的是，BROWSIX是仅JavaScript的解决方案，因为它是在WebAssembly发布之前构建的。 此外，BROWSIX有高性能开销，这在进行基准测试时将是一个很大的影响因素。使用BROWSIX，很难将性能不佳的基准与BROWSIX引入的性能下降区分开来。
 
-### 贡献
-* **BROWSIX-WASM:** 我们开发了BROWSIX-WASM, BROWSIX的显着扩展和增强，使我们能够将Unix程序编译为Web-Assembly，并在浏览器中运行它们而无需进行任何修改。 除了集成功能扩展之外，BROWSIX-WASM还提供了可大幅提高其性能的性能优化，从而确保CPU密集型应用程序的运行几乎没有BROWSIX-WASM带来的影响。
+* **BROWSIX-WASM:** 我们开发了BROWSIX-WASM, 他是BROWSIX的显着扩展和增强，使我们能够将Unix程序编译为Web-Assembly，并在浏览器中运行它们而无需进行任何修改。 除了集成功能扩展之外，BROWSIX-WASM还提供了可大幅提高其性能的性能优化，从而确保CPU密集型应用程序的运行几乎没有BROWSIX-WASM带来的影响。
   
-* **BROWSIX-SPEC** 我们开发了BROWSIX-SPEC，这是一种扩展了BROWSIX-WASM的线束，可以自动收集详细的时序和硬件片上性能计数器信息，以便对应用程序性能进行详细测量（第3节）。
+* **BROWSIX-SPEC** 我们开发了BROWSIX-SPEC，这是一个扩展了BROWSIX-WASM的工具，可以自动收集详细的时序和硬件片上性能计数器信息，以便对应用程序性能进行详细测量（第3节）。
+
+* **WebAssembly的性能分析**：使用BROWSIX-WASM和BROWSIX-SPEC，我们使用SPEC CPU基准套件（2006年和2017年）进行了Web-Assembly的首次综合性能分析。 该评估证实，WebAssembly的运行速度比JavaScript快（在SPEC CPU上平均快1.3倍）。 但是，与先前的工作相反，我们发现WebAssembly和本机性能之间存在巨大差距：编译为WebAssembly的代码在Chrome中的运行速度平均比本机代码慢1.55倍，在Firefox中运行速度比本机代码慢1.45倍（第4节）。
+* **根本原因分析和对实施者的建议**：我们借助性能计数器结果进行辩证分析，以找出造成这种性能差距的根本原因。 我们发现以下结果：
+1. WebAssembly生成的指令比本地代码需要更多的加载和存储（Chrome中有2.02倍的加载和2.30倍的存储；在Firefox中有1.92倍的加载和2.16倍的存储）。 我们将其归因于减少了寄存器的可用性，次优的寄存器分配器以及无法有效利用更广泛的x86寻址模式。
+2. WebAssembly产生的指令具有更多分支，因为WebAssembly需要多次动态安全检查。
+3. WebAssembly产生了更多指令，这会导致更多的L1指令高速缓存未命中。我们提供指南，以帮助WebAssembly实现者集中精力进行优化工作，以缩小WebAssembly与本机代码之间的性能差距（第5,6节）。BROWSIX-WASM和BROWSIX-SPEC可在https://browsix.org获得
+
+## 从BROWSIX到BROWSIX-WASM
+BROWSIX[29]在浏览器中模拟Unix内核，并包括一个将本机程序编译为JavaScript的编译器（基于Emscripten [33,39]）。而且,它们允许在C，C++和Go在浏览器中运行，并自由使用操作系统服务，例如管道，进程和文件系统。 但是，BROWSIX有两个必须克服的主要限制。 首先，BROWSIX将本地代码编译为JavaScript，而不是WebAssembly。 其次，BROWSIX内核存在严重的性能问题。 特别是，在BROWSIX中，几个常见的系统调用具有非常高的开销，这使得很难将在BROWSIX中运行的程序的性能与本地运行的程序的性能进行比较。
+
+我们通过构建一个新的浏览器环境来解决这些限制, 叫做BROWSIX-WASM
+
+### 贡献
 
 
 ## References

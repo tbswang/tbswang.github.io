@@ -87,3 +87,9 @@ git add .
 
 git rebase --continue  
 ```
+
+- 批量删除分支
+```bash
+git branch -D `git branch | grep [要删除的分支]` 
+```
+可以用grep的语法,比如-E
