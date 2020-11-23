@@ -114,3 +114,8 @@ search:
   format: html
   limit: 10000
   content: true
+
+# add caption for iamges
+image_caption:
+  enable: false #false to disable
+  class_name:
