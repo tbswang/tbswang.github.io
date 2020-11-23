@@ -5,6 +5,7 @@ tags:
   - 翻译
 ---
 
+> 原文: https://www.usenix.org/system/files/atc19-jangda.pdf
 # 摘要
 
 现在，所有主要的Web浏览器都支持WebAssembly，这是一种低级字节码，可以由C和C++代码的编译生成。WebAssembly的一个关键目标是与本机原生代码实现性能均等。之前的工作报告显示他们是几乎是等价的，许多编译到WebAssembly的应用程序的运行速度比原始代码平均慢10％。但是，这些评估仅限于一组科学内核，每个内核包含大约100行代码。无法运行大型的应用程序，将代码编译为WebAssembly是难题的一部分,另外标准的Unix API在Web浏览器环境中不可用。为了应对这一挑战，我们构建了BROWSIX-WASM，这是对[BROWSIX][29]的重要扩展，这是第一次, 使在浏览器内直接运行的WebAssembly编译的Unix应用程序。 然后，我们使用BROWSIX-WASM对WebAssemblyvs的性能进行首次大规模评估。在SPEC CPU基准测试套件中，我们发现了巨大的性能差距：编译为WebAssembly的应用程序的运行速度平均降低了45％（Firefox）至55％（Chrome），峰值速度降低了2.08×（Firefox）和2.5×（Chrome ）。我们确定了造成这种性能下降的原因，其中一些是由于缺少优化和代码生成问题而引起的，而另一些是由于WebAssembly所固有的。
