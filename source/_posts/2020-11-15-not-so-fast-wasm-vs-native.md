@@ -1,5 +1,5 @@
 ---
-title: not-so-fast-wasm-vs-native
+title: wasm并没有原生代码那么快
 date: 2020-11-15 20:19:05
 tags:
   - 翻译
