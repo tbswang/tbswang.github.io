@@ -38,8 +38,8 @@ custom_file_path:
 # Schemes
 # scheme: Muse
 #scheme: Mist
-# scheme: Pisces
-scheme: Gemini
+scheme: Pisces
+#scheme: Gemini
 
 # Dark Mode
 darkmode: true
@@ -244,7 +244,7 @@ read_more_btn: true
 # Post meta display settings
 post_meta:
   item_text: true
-  created_at: true
+  created_at: false
   updated_at:
     enable: true
     another_day: true
@@ -340,7 +340,7 @@ calendar:
 
 # Preconnect CDN for fonts and plugins.
 # For more information: https://www.w3.org/TR/resource-hints/#preconnect
-preconnect: false
+preconnect: true
 
 # Set the text alignment in posts / pages.
 text_align:
@@ -372,7 +372,7 @@ codeblock:
     dark: prism-dark
   # Add copy button on codeblock
   copy_button:
-    enable: false
+    enable: true
     # Available values: default | flat | mac
     style:
 
@@ -511,7 +511,7 @@ math:
   every_page: false
 
   mathjax:
-    enable: false
+    enable: true
     # Available values: none | ams | all
     tags: none
 
@@ -535,7 +535,7 @@ mediumzoom: false
 
 # Vanilla JavaScript plugin for lazyloading images.
 # For more information: https://apoorv.pro/lozad.js/demo/
-lazyload: false
+lazyload: true
 
 # Pangu Support
 # For more information: https://github.com/vinta/pangu.js
@@ -595,7 +595,7 @@ comments:
 disqus:
   enable: true
   shortname: tbswang
-  count: true
+  count: false
 
 # DisqusJS
 # For more information: https://disqusjs.skk.moe
@@ -825,7 +825,7 @@ mermaid:
 # For more information: https://animate.style
 motion:
   enable: true
-  async: true
+  async: false
   transition:
     # All available transition variants: https://theme-next.js.org/animate/
     post_block: 
