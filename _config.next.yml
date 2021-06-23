@@ -593,7 +593,7 @@ comments:
 # Disqus
 # For more information: https://disqus.com
 disqus:
-  enable: false
+  enable: true
   shortname: tbswang
   count: true
 
