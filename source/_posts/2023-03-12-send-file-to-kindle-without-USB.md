@@ -1,5 +1,5 @@
 ---
-title: send-file-to-kindle-without-USB
+title: 不使用USB向kindle发送书
 date: 2023-03-12 01:34:35
 tags:
 ---
