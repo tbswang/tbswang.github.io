@@ -25,12 +25,15 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
       - name: Setup Hexo
+        env:
+          ACTION_DEPLOY_KEY: ${{ secrets.HEXO_DEPLOY_KEY }}
         run: |
+          mkdir -p ~/.ssh/
+          echo "$ACTION_DEPLOY_KEY" > ~/.ssh/id_rsa
+          chmod 700 ~/.ssh
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
           npm install hexo-cli -g
           git config --global user.email "gt2017qd@163.com"
           git config --global user.name "tbswang"
