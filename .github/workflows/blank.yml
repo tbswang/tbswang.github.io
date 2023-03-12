@@ -34,12 +34,13 @@ jobs:
           chmod 700 ~/.ssh
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-          npm install hexo-cli -g
           git config --global user.email "gt2017qd@163.com"
           git config --global user.name "tbswang"
+          npm install hexo-cli -g
+          npm install hexo-deployer-git --save
           npm install
 
       - name: Deploy
         run: |
           hexo clean
-          hexo deploy
+          hexo g -d
