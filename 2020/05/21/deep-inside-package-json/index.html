@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.21.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":null,"post_header":null,"post_body":null,"coll_header":null,"sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="原文: https:&#x2F;&#x2F;docs.npmjs.com&#x2F;files&#x2F;package.json 描述package.json文件是一个json文件,不是一个js对象字面量.  下面是各个字段的介绍">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入了解package.json">
+<meta property="og:url" content="http://yoursite.com/2020/05/21/deep-inside-package-json/index.html">
+<meta property="og:site_name" content="tbswang&#39;s blogs">
+<meta property="og:description" content="原文: https:&#x2F;&#x2F;docs.npmjs.com&#x2F;files&#x2F;package.json 描述package.json文件是一个json文件,不是一个js对象字面量.  下面是各个字段的介绍">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-05-21T07:10:06.000Z">
+<meta property="article:modified_time" content="2024-10-30T08:02:10.817Z">
+<meta property="article:author" content="tbswang">
+<meta property="article:tag" content="翻译">
+<meta property="article:tag" content="npm">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://yoursite.com/2020/05/21/deep-inside-package-json/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://yoursite.com/2020/05/21/deep-inside-package-json/","path":"2020/05/21/deep-inside-package-json/","title":"深入了解package.json"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>深入了解package.json | tbswang's blogs</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">tbswang's blogs</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#name"><span class="nav-number">1.</span> <span class="nav-text">name</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E8%A7%84%E5%88%99"><span class="nav-number">1.1.</span> <span class="nav-text">一些规则:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%BB%BA%E8%AE%AE"><span class="nav-number">1.2.</span> <span class="nav-text">一些建议:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#version"><span class="nav-number">2.</span> <span class="nav-text">version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#decription-%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.</span> <span class="nav-text">decription 描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#keywords-%E5%85%B3%E9%94%AE%E8%AF%8D"><span class="nav-number">4.</span> <span class="nav-text">keywords 关键词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#homepage-%E4%B8%BB%E9%A1%B5"><span class="nav-number">5.</span> <span class="nav-text">homepage 主页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bugs"><span class="nav-number">6.</span> <span class="nav-text">bugs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#license-%E8%AF%81%E4%B9%A6"><span class="nav-number">7.</span> <span class="nav-text">license 证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8E%E4%BA%BA%E7%9B%B8%E5%85%B3%E7%9A%84%E5%AD%97%E6%AE%B5-author-contributors"><span class="nav-number">8.</span> <span class="nav-text">与人相关的字段: author, contributors</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#files"><span class="nav-number">9.</span> <span class="nav-text">files</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#main"><span class="nav-number">10.</span> <span class="nav-text">main</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#browser"><span class="nav-number">11.</span> <span class="nav-text">browser</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bin"><span class="nav-number">12.</span> <span class="nav-text">bin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#man"><span class="nav-number">13.</span> <span class="nav-text">man</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#directories"><span class="nav-number">14.</span> <span class="nav-text">directories</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#repository"><span class="nav-number">15.</span> <span class="nav-text">repository</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scripts"><span class="nav-number">16.</span> <span class="nav-text">scripts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#config"><span class="nav-number">17.</span> <span class="nav-text">config</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dependencies"><span class="nav-number">18.</span> <span class="nav-text">dependencies</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#url-%E4%BD%9C%E4%B8%BA%E4%BE%9D%E8%B5%96"><span class="nav-number">18.1.</span> <span class="nav-text">url 作为依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-url-%E4%BD%9C%E4%B8%BA%E4%BE%9D%E8%B5%96"><span class="nav-number">18.2.</span> <span class="nav-text">git url 作为依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#github-url"><span class="nav-number">18.3.</span> <span class="nav-text">github url</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E8%B7%AF%E5%BE%84"><span class="nav-number">18.4.</span> <span class="nav-text">本地路径</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#devDependencies-%E5%BC%80%E5%8F%91%E4%BE%9D%E8%B5%96"><span class="nav-number">19.</span> <span class="nav-text">devDependencies 开发依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#peerDependencies"><span class="nav-number">20.</span> <span class="nav-text">peerDependencies</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bundledDependencies"><span class="nav-number">21.</span> <span class="nav-text">bundledDependencies</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optionalDependencies"><span class="nav-number">22.</span> <span class="nav-text">optionalDependencies</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#engines"><span class="nav-number">23.</span> <span class="nav-text">engines</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#engineStrict"><span class="nav-number">24.</span> <span class="nav-text">engineStrict</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#os"><span class="nav-number">25.</span> <span class="nav-text">os</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cpu"><span class="nav-number">26.</span> <span class="nav-text">cpu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#preferGlobal"><span class="nav-number">27.</span> <span class="nav-text">preferGlobal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#private"><span class="nav-number">28.</span> <span class="nav-text">private</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#publishConfig"><span class="nav-number">29.</span> <span class="nav-text">publishConfig</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E5%80%BC"><span class="nav-number">30.</span> <span class="nav-text">默认值</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">tbswang</p>
+  <div class="site-description" itemprop="description">计算机技术</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tbswang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tbswang" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/21/deep-inside-package-json/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tbswang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tbswang's blogs">
+      <meta itemprop="description" content="计算机技术">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="深入了解package.json | tbswang's blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入了解package.json
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-05-21 15:10:06" itemprop="dateCreated datePublished" datetime="2020-05-21T15:10:06+08:00">2020-05-21</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>原文: <a target="_blank" rel="noopener" href="https://docs.npmjs.com/files/package.json">https://docs.npmjs.com/files/package.json</a></p>
+<p>描述<br>package.json文件是一个json文件,不是一个js对象字面量.</p>
+<blockquote>
+<p>下面是各个字段的介绍</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="name"><a href="#name" class="headerlink" title="name"></a>name</h2><p>如果想要发布包, 最重要的就是<code>name</code>和<code>version</code>字段,他们是必须的.<code>name</code>和<code>version</code>组合起来作为一个标识符, 必须是唯一的.改变包的内容需要改变包的版本号.如果不打算发布,那么名字和版本字段就是可选的.</p>
+<h3 id="一些规则"><a href="#一些规则" class="headerlink" title="一些规则:"></a>一些规则:</h3><ul>
+<li>名字必须少于或等于214个字符.包括了scoped package的scope. 例如@jd&#x2F;xxx.</li>
+<li>名字开头不能是点或者下划线</li>
+<li>不能包含大写</li>
+<li>名字可能会作为url的一部分,一个命令行的参数,或者以文件夹名字.所以名字不能包含非URL安全的字符.</li>
+</ul>
+<h3 id="一些建议"><a href="#一些建议" class="headerlink" title="一些建议:"></a>一些建议:</h3><ul>
+<li>不要与node的核心模块的名字重复</li>
+<li>不要加入node 或者 js. 因为写了package.json, 就已经认定是js. 另外可以使用<code>engine</code>字段指定执行的引擎</li>
+<li>名字可以作为<code>require()</code>函数的参数,所以应该短一些,但要有合理的描述性</li>
+<li>在用名字之前,最好先在<code>https://www.npmjs.com/</code>先检查一下</li>
+</ul>
+<h2 id="version"><a href="#version" class="headerlink" title="version"></a>version</h2><p>Version必须可以被 <a target="_blank" rel="noopener" href="https://github.com/isaacs/node-semver">node-semver</a>解析.</p>
+<h2 id="decription-描述"><a href="#decription-描述" class="headerlink" title="decription 描述"></a>decription 描述</h2><p>一段描述性的字符串.可以帮助人们发现你的包,可以在<code>npm search</code>中展示</p>
+<h2 id="keywords-关键词"><a href="#keywords-关键词" class="headerlink" title="keywords 关键词"></a>keywords 关键词</h2><p>一个字符串列表.也可以在<code>npm search</code>中展示</p>
+<h2 id="homepage-主页"><a href="#homepage-主页" class="headerlink" title="homepage 主页"></a>homepage 主页</h2><p>项目的主页.例如<code>&quot;homepage&quot;: &quot;https://github.com/owner/project#readme&quot;</code></p>
+<h2 id="bugs"><a href="#bugs" class="headerlink" title="bugs"></a>bugs</h2><p>项目中的issue的跟踪器(比如GitHub issue, jira, gitlab issue)或者一个email 地址, 可以用来报告issue.这对遇到问题的人很有帮助.<br>他看起来是这样的:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> </span><br><span class="line">  <span class="attr">&quot;url&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;https://github.com/owner/project/issues&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;email&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;project@hostname.com&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>可以指定一个或多个值.如果只提供一个url,那么可以把bugs的值设置为一个字符串.</p>
+<p>如果设置了url,可以被<code>npm bugs</code>命令用到</p>
+<h2 id="license-证书"><a href="#license-证书" class="headerlink" title="license 证书"></a>license 证书</h2><p>应该制定一个证书, 这样人们可以知道他们允许如何使用. 你可以把你的任何限制放到这里.</p>
+<p>可以使用一个公开的证书比如MIT,比如</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;license&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;BSD-3-Clause&quot;</span> <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>如果不想给其他人使用私有的或者未发布的包,可以使用:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;license&quot;</span><span class="punctuation">:</span> <span class="string">&quot;UNLICENSED&quot;</span> <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>也可以设置<code>&quot;private&quot;: true</code>来避免意外发布.</p>
+<h2 id="与人相关的字段-author-contributors"><a href="#与人相关的字段-author-contributors" class="headerlink" title="与人相关的字段: author, contributors"></a>与人相关的字段: author, contributors</h2><p>作者是一个人,贡献者是人名列表.其中,一个<code>person</code>是一个对象,包含<code>name</code>字段.<code>url</code>和<code>email</code>字段是非必填.比如:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;name&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;Barney Rubble&quot;</span></span><br><span class="line"><span class="punctuation">,</span> <span class="attr">&quot;email&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;b@rubble.com&quot;</span></span><br><span class="line"><span class="punctuation">,</span> <span class="attr">&quot;url&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;http://barnyrubble.tumblr.com/&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>也可以把这个简化为一个字符串,npm会自动解析</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;Barney Rubble &lt;b@rubble.com&gt; (http://barnyrubble.tumblr.com/)&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="files"><a href="#files" class="headerlink" title="files"></a>files</h2><p>文件字段是一个文件通配符的列表,当包作为一个依赖,可以描述包的入口文件. 文件通配符与 <code>.gitignore</code> 遵循类似的语法,但是有所保留: 当打包的时候可以包含一个文件,文件夹或者一个通配符文件.忽略这个字段将会默认为<code>[*]</code>, 意思是包含所有的文件.</p>
+<p>有些特殊的文件和文件夹会包含或者剔除,无论他们是否存在于<code>file</code>字段.</p>
+<p>也可以提供<code>.npmingore</code>文件在包的根目录,可以防止文件被包含进去.在包的根目录下,他不会覆盖<code>files</code>字段,但是在子目录中可以.<code>.npmignore</code>文件类似于<code>.gitignore</code></p>
+<p>无论设置如何, 以下的文件始终被包含:</p>
+<ul>
+<li>package.json</li>
+<li>README</li>
+<li>CHANGES &#x2F; CHANGELOG &#x2F; HISTORY</li>
+<li>LICENSE &#x2F; LICENCE</li>
+<li>NOTICE</li>
+<li>在’main’字段中的文件</li>
+</ul>
+<p>相对的,以下的文件始终被忽略</p>
+<ul>
+<li>.git</li>
+<li>CVS</li>
+<li>.svn</li>
+<li>.hg</li>
+<li>.lock-wscript</li>
+<li>.wafpickle-N</li>
+<li>.*.swp</li>
+<li>.DS_Store</li>
+<li>._*</li>
+<li>npm-debug.log</li>
+<li>.npmrc</li>
+<li>node_modules</li>
+<li>config.gypi</li>
+<li>*.orig</li>
+<li>package-lock.json (use shrinkwrap instead)</li>
+</ul>
+<h2 id="main"><a href="#main" class="headerlink" title="main"></a>main</h2><p>main字段是程序的主入口.如果一个包名字为<code>foo</code>,一个用户安装了他,然后<code>require(&#39;foo&#39;)</code>,那么将返回主模块输出对象</p>
+<p>他应该是一个相对包文件夹的相对id</p>
+<p>对大部分的模块,他最大的意义就是一个入口</p>
+<h2 id="browser"><a href="#browser" class="headerlink" title="browser"></a>browser</h2><p>如果模块只在浏览器端使用,那么应该设置<code>browser</code>字段而不是<code>main</code>字段.这可以提示用户, 这个包用到一些nodejs没有的特性</p>
+<h2 id="bin"><a href="#bin" class="headerlink" title="bin"></a>bin</h2><p>很多包有一个或多个可执行文件,他们想要安装在<code>PATH</code>中,npm让这个非常简单,</p>
+<p>为了使用这个, 提供一个<code>bin</code>字段,映射命令的名字和本地文件的名字.当安装的时候, npm会链接文件到<code>prefix/bin</code>全局安装, 或者到<code>./node_modules/.bin</code>中作为本地使用.</p>
+<p>例如:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;bin&quot;</span> <span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;myapp&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;./cli.js&quot;</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果只有一个可执行文件,他的名字就是包的名字, 那么可以只提供一个字符串.</p>
+<p>还要确认<code>bin</code>字段指定的文件是<code>#!/usr/bin/env node</code>, 否则脚本就不能使用node的执行环境</p>
+<h2 id="man"><a href="#man" class="headerlink" title="man"></a>man</h2><p>给<code>man</code>程序指定一个或多个文件.</p>
+<h2 id="directories"><a href="#directories" class="headerlink" title="directories"></a>directories</h2><p>commonjs规范指明了使用 <code>directories</code>对象来判断包的结构. 如果你看着package.json我,你就会看到他有文档,类库,和说明文档的目录.</p>
+<p>在将来,这个信息还可以在一些其他的创造性的方式.</p>
+<h2 id="repository"><a href="#repository" class="headerlink" title="repository"></a>repository</h2><p>指定在线代码的位置.这对想贡献代码的人很有帮助.如果git仓库是github,那么<code>npm docs</code>命令可以帮你找到.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;repository&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;git&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;url&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;https://github.com/npm/cli.git&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">&quot;repository&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;svn&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;url&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;https://v8.googlecode.com/svn/trunk/&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>如果包不在根目录, 也可以指定在线代码的目录,比如这样:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;repository&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;git&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;url&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;https://github.com/facebook/react.git&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;directory&quot;</span><span class="punctuation">:</span> <span class="string">&quot;packages/react-dom&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="scripts"><a href="#scripts" class="headerlink" title="scripts"></a>scripts</h2><p>这个属性指定在包的不同生命周期运行的脚本命令.key是命周期的事件,值是具体的命令.</p>
+<h2 id="config"><a href="#config" class="headerlink" title="config"></a>config</h2><p>配置对象是在脚本中一直使用的配置参数.比如</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;name&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;foo&quot;</span></span><br><span class="line"><span class="punctuation">,</span> <span class="attr">&quot;config&quot;</span> <span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;port&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;8080&quot;</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>如果之后<code>start</code>命令引用了<code>npm_package_config_port</code>环境变量,那么用户可以通过<code>npm config set foo:port 8001</code>覆盖.例如</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// package.json</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npm-start&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;start2&quot;</span><span class="punctuation">:</span><span class="string">&quot;npm config set &#x27;npm-start&#x27;:port 8001 &amp;&amp; node index.js&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;config&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="string">&quot;8080&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(process.<span class="property">env</span>.<span class="property">npm_package_config_port</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="dependencies"><a href="#dependencies" class="headerlink" title="dependencies"></a>dependencies</h2><p>依赖是一个简单的对象, 映射包的名字和版本范围.版本范围是一个字符串,有一个或多个用空格分开的描述符.依赖也可以是一个压缩文件或者一个git url.</p>
+<p>不要把测试和中间文件放到依赖中, 可以放到 <code>devDependencies</code>中.</p>
+<p><code>semver</code>中指定了版本的范围.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">* version 精确匹配</span><br><span class="line">* &gt;version 大于当前版本</span><br><span class="line">* &gt;=version 大于等于当前版本</span><br><span class="line">* &lt;version</span><br><span class="line">* &lt;=version</span><br><span class="line">* ~version “Approximately equivalent to version” See semver</span><br><span class="line">* ^version “Compatible with version” See semver</span><br><span class="line">* 1.2.x 1.2.0, 1.2.1, etc., but not 1.3.0</span><br><span class="line">* http://... See ‘URLs as Dependencies’ below</span><br><span class="line">* * 任何版本</span><br><span class="line">* &quot;&quot; 空白字符串, 与*相同</span><br><span class="line">* version1 - version2 大于等于版本1, 小于等于版本2</span><br><span class="line">* range1 || range2 </span><br><span class="line">* git... </span><br><span class="line">* user/repo</span><br><span class="line">* tag 带有标签的版本</span><br><span class="line">* path/path/path 本地路径</span><br></pre></td></tr></table></figure>
+
+<h3 id="url-作为依赖"><a href="#url-作为依赖" class="headerlink" title="url 作为依赖"></a>url 作为依赖</h3><p>可以指定一个压缩文件放到版本范围中.<br>压缩文件可以下载并且本地安装</p>
+<h3 id="git-url-作为依赖"><a href="#git-url-作为依赖" class="headerlink" title="git url 作为依赖"></a>git url 作为依赖</h3><p>git url 如下形式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;protocol&gt;://[&lt;user&gt;[:&lt;password&gt;]@]&lt;hostname&gt;[:&lt;port&gt;][:][/]&lt;path&gt;[#&lt;commit-ish&gt; | #semver:&lt;semver&gt;]</span><br></pre></td></tr></table></figure>
+
+<p><code>&lt;protocol&gt;</code>是git, git+ssh, git+http, git+https, or git+file中的一个.</p>
+<p>如果有<code>#&lt;commit-ish&gt;</code>,就可以精确克隆这个提交.</p>
+<h3 id="github-url"><a href="#github-url" class="headerlink" title="github url"></a>github url</h3><p>可以使用<code>“foo”: “user/foo-project”</code>来指定github 链接</p>
+<h3 id="本地路径"><a href="#本地路径" class="headerlink" title="本地路径"></a>本地路径</h3><p>如下形式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">../foo/bar</span><br><span class="line">~/foo/bar</span><br><span class="line">./foo/bar</span><br><span class="line">/foo/bar</span><br></pre></td></tr></table></figure>
+
+<p>如果是相对路径,</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;baz&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;dependencies&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;bar&quot;</span><span class="punctuation">:</span> <span class="string">&quot;file:../foo/bar&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>这个特性可以帮助本地的离线开发者测试一些不想从外部服务器安装的包.但是在发布的公共库就不能这样使用了.</p>
+<h2 id="devDependencies-开发依赖"><a href="#devDependencies-开发依赖" class="headerlink" title="devDependencies 开发依赖"></a>devDependencies 开发依赖</h2><p>如果有人计划在他们的程序中使用你的模块,那么他们可能不想或者不需要使用你的库中用到测试框架.</p>
+<p>这时候, 最好把这些额外的配置放到<code>devDependencies</code>中. </p>
+<p>这些东西在<code>npm link</code>和<code>npm install</code>的时候会安装, 可以想其他 npm 配置一样被管理.</p>
+<p>如果不指定平台,构建,比如说把 coffeescritp 或者其他语言编译成 js,可以使用 <code>prepare</code>脚本完成这个.</p>
+<p>比如说:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ethopia-waza&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;a delightfully fruity coffee varietal&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1.2.3&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;devDependencies&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;coffee-script&quot;</span><span class="punctuation">:</span> <span class="string">&quot;~1.6.3&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;prepare&quot;</span><span class="punctuation">:</span> <span class="string">&quot;coffee -o lib/ -c src/waza.coffee&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;main&quot;</span><span class="punctuation">:</span> <span class="string">&quot;lib/waza.js&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><code>prepare</code>脚本会在发布之前运行, 用户可以自动使用这个功能. 开发模式中,也会运行这个脚本,你可以很容易测试.(TODO:)</p>
+<h2 id="peerDependencies"><a href="#peerDependencies" class="headerlink" title="peerDependencies"></a><a target="_blank" rel="noopener" href="https://www.cnblogs.com/wonyun/p/9692476.html">peerDependencies</a></h2><p>有些情况, 可能想要表达对宿主环境的兼容性. 你的模块可能暴露一个特定的接口,指定宿主环境的文档.例如</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tea-latte&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1.3.5&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;peerDependencies&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;tea&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2.x&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这确保了你的包可以单独作为一个宿主环境的包安装.安装了<code>tea-latte</code>之后,可能会有这样的依赖图.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">├── tea-latte@1.3.5</span><br><span class="line">└── tea@2.2.0</span><br></pre></td></tr></table></figure>
+
+<p>注意:在 npm1 和 npm2 会自动安装<code>peerDenpendenices</code>.在 npm3 之后,就不是这样的.使用的时候,可能会收到一个警告,<code>peerDenpendencies</code>没有安装.在 npm1 和<br>npm2 中的这种行为,可能会导致模块地狱.</p>
+<p>当有依赖冲突的时候, 会报错.</p>
+<h2 id="bundledDependencies"><a href="#bundledDependencies" class="headerlink" title="bundledDependencies"></a>bundledDependencies</h2><p>这里指定了一些包,如果发布, 就打包他们.</p>
+<p>当你需要在本地保留包或者想要通过文件下载, 可以设置 peerDependencies 然后执行 npm pack</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;awesome-web-framework&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;bundledDependencies&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;renderized&quot;</span><span class="punctuation">,</span> <span class="string">&quot;super-streams&quot;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>可以运行<code>npm pack</code>获得一个<code>awesome-web-framework-1.0.0.tgz</code>的文件.这个文件包含了<code>renderized and super-streams</code>这两个依赖.这里的包名不包含版本,相关的信息在 dependencies 中指定.</p>
+<h2 id="optionalDependencies"><a href="#optionalDependencies" class="headerlink" title="optionalDependencies"></a>optionalDependencies</h2><p>当使用一个包的时候, 当无法找到或者安装失败, 你想要 npm 处理他,那么你需要把它放到<code>optionalDependencies</code>中.</p>
+<h2 id="engines"><a href="#engines" class="headerlink" title="engines"></a>engines</h2><p>你可以指定使用的 node 版本.</p>
+<p>与Dependencies类似, 如果不指定版本,那么所有的 node 版本都可以.</p>
+<p>如果指定了 engine 字段,那么 npm 会在某些地方要求 node 版本.如果 engine 忽略了,npm 会默认是 node.</p>
+<p>也可以指定哪个版本的 node 是可以的.比如:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;engines&quot;</span> <span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;npm&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;~1.0.20&quot;</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="engineStrict"><a href="#engineStrict" class="headerlink" title="engineStrict"></a>engineStrict</h2><p>从 npm3.0.0 就被移除啦.</p>
+<h2 id="os"><a href="#os" class="headerlink" title="os"></a>os</h2><p>可能指定运行的操作系统.比如:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;os&quot;</span> <span class="punctuation">:</span> <span class="punctuation">[</span> <span class="string">&quot;darwin&quot;</span><span class="punctuation">,</span> <span class="string">&quot;linux&quot;</span> <span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+
+<p>或者指定运行系统的黑名单.</p>
+<p>主机的操作系统通过<code>process.platform</code>决定.</p>
+<h2 id="cpu"><a href="#cpu" class="headerlink" title="cpu"></a>cpu</h2><p>如果你的代码只能在特定架构中运行,你可以指定</p>
+<h2 id="preferGlobal"><a href="#preferGlobal" class="headerlink" title="preferGlobal"></a>preferGlobal</h2><p>废弃</p>
+<h2 id="private"><a href="#private" class="headerlink" title="private"></a>private</h2><p>如果设置私人为 true,那么 npm 就不会发布他.</p>
+<p>这是一个阻止意外发布的方式.如果只想在特定的 registry 发布,那么就用<code>publishConfig</code></p>
+<h2 id="publishConfig"><a href="#publishConfig" class="headerlink" title="publishConfig"></a>publishConfig</h2><p>这是一组在发布时使用的配置.</p>
+<h2 id="默认值"><a href="#默认值" class="headerlink" title="默认值"></a>默认值</h2><ul>
+<li><p><code>&quot;scripts&quot;: &#123;&quot;start&quot;: &quot;node server.js&quot;&#125;</code><br>如果在根目录中有一个 server.js, 那么会默认创建一个启动命令.</p>
+</li>
+<li><p><code>&quot;scripts&quot;:&#123;&quot;install&quot;: &quot;node-gyp rebuild&quot;&#125;</code><br>如果有一个<code>binding.gyp</code>, 而且也没有定义<code>install</code>和<code>preinstall</code>脚本.</p>
+</li>
+<li><p><code>&quot;contributors&quot;: [...]</code><br>如果有<code>AUTHOR</code>文件</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BF%BB%E8%AF%91/" rel="tag"># 翻译</a>
+              <a href="/tags/npm/" rel="tag"># npm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/04/29/bash-command-offen-used/" rel="prev" title="常用的bash命令">
+                  <i class="fa fa-angle-left"></i> 常用的bash命令
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/05/26/The-most-characters-in-a-string/" rel="next" title="字符串中最多的字符">
+                  字符串中最多的字符 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tbswang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"tbswang","count":false,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

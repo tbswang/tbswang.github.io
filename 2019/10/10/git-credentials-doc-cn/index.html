@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.21.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":null,"post_header":null,"post_body":null,"coll_header":null,"sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="原文：https:&#x2F;&#x2F;git-scm.com&#x2F;docs&#x2F;gitcredentials  名字gitcredentials - 向git提供用户名和密码 概览12git config credential.https:&#x2F;&#x2F;example.com.username myusernamegit config credential.helper &quot;$helper $options&quot;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git-credentials中文文档">
+<meta property="og:url" content="http://yoursite.com/2019/10/10/git-credentials-doc-cn/index.html">
+<meta property="og:site_name" content="tbswang&#39;s blogs">
+<meta property="og:description" content="原文：https:&#x2F;&#x2F;git-scm.com&#x2F;docs&#x2F;gitcredentials  名字gitcredentials - 向git提供用户名和密码 概览12git config credential.https:&#x2F;&#x2F;example.com.username myusernamegit config credential.helper &quot;$helper $options&quot;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-10T07:40:20.000Z">
+<meta property="article:modified_time" content="2024-10-30T08:02:10.816Z">
+<meta property="article:author" content="tbswang">
+<meta property="article:tag" content="翻译">
+<meta property="article:tag" content="git">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://yoursite.com/2019/10/10/git-credentials-doc-cn/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://yoursite.com/2019/10/10/git-credentials-doc-cn/","path":"2019/10/10/git-credentials-doc-cn/","title":"git-credentials中文文档"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>git-credentials中文文档 | tbswang's blogs</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">tbswang's blogs</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8D%E5%AD%97"><span class="nav-number">1.</span> <span class="nav-text">名字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%A7%88"><span class="nav-number">2.</span> <span class="nav-text">概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%87%AD%E8%AF%81"><span class="nav-number">4.</span> <span class="nav-text">获取凭证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E9%87%8D%E5%A4%8D"><span class="nav-number">5.</span> <span class="nav-text">避免重复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E9%89%B4%E6%9D%83%E7%9A%84%E4%B8%8A%E4%B8%8B%E6%96%87%E7%8E%AF%E5%A2%83"><span class="nav-number">6.</span> <span class="nav-text">用户鉴权的上下文环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E9%80%89%E9%A1%B9"><span class="nav-number">7.</span> <span class="nav-text">配置选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%AD%E8%AF%81%E5%8A%A9%E6%89%8B"><span class="nav-number">8.</span> <span class="nav-text">自定义凭证助手</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git"><span class="nav-number">9.</span> <span class="nav-text">git</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">tbswang</p>
+  <div class="site-description" itemprop="description">计算机技术</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tbswang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tbswang" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/10/git-credentials-doc-cn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tbswang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tbswang's blogs">
+      <meta itemprop="description" content="计算机技术">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="git-credentials中文文档 | tbswang's blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          git-credentials中文文档
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-10-10 15:40:20" itemprop="dateCreated datePublished" datetime="2019-10-10T15:40:20+08:00">2019-10-10</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><ul>
+<li>原文：<a target="_blank" rel="noopener" href="https://git-scm.com/docs/gitcredentials">https://git-scm.com/docs/gitcredentials</a></li>
+</ul>
+<h2 id="名字"><a href="#名字" class="headerlink" title="名字"></a>名字</h2><p>gitcredentials - 向git提供用户名和密码</p>
+<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config credential.https://example.com.username myusername</span><br><span class="line">git config credential.helper <span class="string">&quot;<span class="variable">$helper</span> <span class="variable">$options</span>&quot;</span></span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>有时候git需要一些用户信息来完成一些操作，这些用户信息叫做凭证。比如说，可能需要用户名和密码来通过http来访问远程仓库。这份手册描述了git的获取用户凭证的机制，依赖这个机制也可以避免重复输入。</p>
+<h2 id="获取凭证"><a href="#获取凭证" class="headerlink" title="获取凭证"></a>获取凭证</h2><p>当没有凭证的时候，git将会按照一下的策略向用户询问用户名和密码。</p>
+<ol>
+<li>如果设置了<code>GIT_ASKPASS</code>环境变量，就会调用变量指定的程序。在命令行中会适时的提示，并且从标准输出设备中读取输入。</li>
+<li>如果配置了<code>core.askPass</code>，就按照上面的方式使用该变量。</li>
+<li>如果配置了<code>SSH_ASKPASS</code>环境变量，按照上面的方式使用该变量。</li>
+<li>在终端命令行中提示用户。</li>
+</ol>
+<h2 id="避免重复"><a href="#避免重复" class="headerlink" title="避免重复"></a>避免重复</h2><p>对于需要一次一次的重复输入相同的用户信息的情况。git提供了两种方法来避免这种烦恼。</p>
+<ol>
+<li>在当前对用户权限验证环境中，对用户名进行静态配置。</li>
+<li>使用凭证助手缓存或者存储密码，或者与系统密码和密码链交互。</li>
+</ol>
+<p>第一种很简单，适用于不能安全存储密码的情况。这会在配置文件中增加如下的配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[credential &quot;https://example.com&quot;]</span><br><span class="line">	username = me</span><br></pre></td></tr></table></figure>
+<p>另一种方式，凭证助手是一个额外的程序，git可以从中获取用户名和密码。这通常依赖系统或者其他程序提供的安全存储。</p>
+<p>为了使用凭证助手，首先要选择一个使用。git当前包含了一下的凭证助手：</p>
+<p><strong>cache</strong></p>
+<p>在内存中缓存凭证供短期使用。查看<a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-credential-cache"><code>git-credential-cache</code></a>获取更多细节。</p>
+<p><strong>store</strong></p>
+<p>在硬盘中长期存储凭证。查看<a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-credential-store"><code>git-credential-store</code></a>获取更多细节。</p>
+<p>有可能你已经装了第三方的助手，在<code>git help -a</code>中搜索<code>credential-*</code>，然后查阅每个助手的文档。一旦你选择了一个助手，你可以把他的名字放在<code>credential.helper</code>变量，告诉git来使用它。</p>
+<ol>
+<li><p>查找助手</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git help -a | grep credential-</span><br><span class="line">credential-foo</span><br></pre></td></tr></table></figure></li>
+<li><p>阅读他的描述</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git help credential-foo</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>告诉git使用他</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global credential.helper foo</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="用户鉴权的上下文环境"><a href="#用户鉴权的上下文环境" class="headerlink" title="用户鉴权的上下文环境"></a>用户鉴权的上下文环境</h2><p>git在url定义的用户权限验证上下文中使用。这个上下文用来查看与上下文相关的配置，并且传递给所有助手，可以用作安全存储的索引。</p>
+<p>比如，我们访问了<code>https://example.com/foo.git</code>，当git查找配置文件确定这一部分是否匹配上下文的时候，如果上下文是配置文件更加详细的子集，他会认定两者匹配。例如，如果有这样的配置文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[credential &quot;https://example.com&quot;]</span><br><span class="line">	username = foo</span><br></pre></td></tr></table></figure>
+
+<p>然后我们可以匹配到：两个协议相同，域名相同，url模式根本不关心路径模块。然而，这个上下文不会匹配：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[credential &quot;https://kernel.org&quot;]</span><br><span class="line">	username = foo</span><br></pre></td></tr></table></figure>
+
+<p>因为域名不同。也不会匹配foo.example.com；git会精确比较域名，而考虑是否两个域名是相同的域。同样的，一个<a target="_blank" rel="noopener" href="http://exmple.com也不会匹配,git会精确比较协议./">http://exmple.com也不会匹配，git会精确比较协议。</a></p>
+<p>如果模式url不包含路径组件，那么也必须精确比较:<code>https://example.com/bar/baz.git</code>的上下文会匹配<code>https://example.com/bar/baz.git</code>,但是不会匹配<code>https://example.com/bar</code>。</p>
+<h2 id="配置选项"><a href="#配置选项" class="headerlink" title="配置选项"></a>配置选项</h2><p>凭证上下文的选项既可以在<code>credential.\*</code>，也可以在<code>credential.&lt;url&gt;.*</code>中配置。url符合上面提到的上下文。</p>
+<p>以下的选择在两种都可以使用：</p>
+<p>helper</p>
+<p>凭证助手的名字，或者相关的选项。如果助手名字不是绝对路径，那么会在前面注入git credential- 的字符串。这个字符串会在shell中执行。比如设置为<code>foo --option=bar</code>实际会在shell中执行<code>git credential-foo --option=bar</code>.查看制定助手的手册来查看例子。</p>
+<p>如果有多个<code>credential-helper</code>的配置变量的实例，那么 <code>git</code>会按照顺序依次尝试，可能需要用户名密码，或者什么都不用。一旦<code>git</code>获取了用户名和密码，就不会尝试其他都凭证助手。</p>
+<p>如果配置了<code>credential.helper</code>为空字符串，这会把凭证助手重置为空。</p>
+<p>用户名<br>  如果url中没有提供，就会作为默认的用户名</p>
+<p><strong>useHttpPath</strong></p>
+<p>默认情况，git不会考虑使用凭证助手匹配url的path。这意味着对<code>https://example.com/foo.git</code>凭证，也可以用于<code>https://example.com/bar.git</code>。如果想要区别这些情况，就把这个选项设置为true。</p>
+<h2 id="自定义凭证助手"><a href="#自定义凭证助手" class="headerlink" title="自定义凭证助手"></a>自定义凭证助手</h2><p>你也可以实现自定义的凭证助手，来配合使用凭证的系统。阅读文档获得更多细节。</p>
+<h2 id="git"><a href="#git" class="headerlink" title="git"></a>git</h2><p>git的一部分。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BF%BB%E8%AF%91/" rel="tag"># 翻译</a>
+              <a href="/tags/git/" rel="tag"># git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/08/13/npm-command-offen-used/" rel="prev" title="常用的npm命令">
+                  <i class="fa fa-angle-left"></i> 常用的npm命令
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/04/29/bash-command-offen-used/" rel="next" title="常用的bash命令">
+                  常用的bash命令 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tbswang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"tbswang","count":false,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.21.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":null,"post_header":null,"post_body":null,"coll_header":null,"sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="abstract使用Array.prototype.reduce，将一组函数链式执行。比如 12const chain &#x3D; compose(a,b,c)chain(); 思路">
+<meta property="og:type" content="article">
+<meta property="og:title" content="compose-函数链式执行">
+<meta property="og:url" content="http://yoursite.com/2019/07/17/use-compose-chain-functions/index.html">
+<meta property="og:site_name" content="tbswang&#39;s blogs">
+<meta property="og:description" content="abstract使用Array.prototype.reduce，将一组函数链式执行。比如 12const chain &#x3D; compose(a,b,c)chain(); 思路">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-07-17T00:21:49.000Z">
+<meta property="article:modified_time" content="2024-10-30T08:02:10.815Z">
+<meta property="article:author" content="tbswang">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://yoursite.com/2019/07/17/use-compose-chain-functions/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://yoursite.com/2019/07/17/use-compose-chain-functions/","path":"2019/07/17/use-compose-chain-functions/","title":"compose-函数链式执行"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>compose-函数链式执行 | tbswang's blogs</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">tbswang's blogs</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#abstract"><span class="nav-number">1.</span> <span class="nav-text">abstract</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#reduce%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="nav-number">2.1.</span> <span class="nav-text">reduce的执行顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E9%97%AD%E5%8C%85"><span class="nav-number">2.2.</span> <span class="nav-text">函数闭包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F"><span class="nav-number">2.3.</span> <span class="nav-text">内存泄漏</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reduce%E9%87%8C%E9%9D%A2%E5%8F%91%E7%94%9F%E4%BA%86%E5%95%A5"><span class="nav-number">3.</span> <span class="nav-text">reduce里面发生了啥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">实际使用</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">tbswang</p>
+  <div class="site-description" itemprop="description">计算机技术</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tbswang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tbswang" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/17/use-compose-chain-functions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tbswang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tbswang's blogs">
+      <meta itemprop="description" content="计算机技术">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="compose-函数链式执行 | tbswang's blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          compose-函数链式执行
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-07-17 08:21:49" itemprop="dateCreated datePublished" datetime="2019-07-17T08:21:49+08:00">2019-07-17</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="abstract"><a href="#abstract" class="headerlink" title="abstract"></a>abstract</h2><p>使用Array.prototype.reduce，将一组函数链式执行。比如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const chain = compose(a,b,c)</span><br><span class="line">chain();</span><br></pre></td></tr></table></figure>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><span id="more"></span>
+<p>我们有一组函数a,b,c，要变成依次调用，只需要a(b(c()))就可以。</p>
+<p>但是，如果有多个函数，总不能光明正大的写出来调用吧。在js中可以通过将函数作为一个参数传递，毕竟回调函数。我们能不能把这一组函数变成a(b())的形式。</p>
+<h3 id="reduce的执行顺序"><a href="#reduce的执行顺序" class="headerlink" title="reduce的执行顺序"></a>reduce的执行顺序</h3><p>reduce函数，原意是用在数组中，将之前的返回的结果作为下次的运行的参数。以mdn的例子(<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce#reduce()_%E5%A6%82%E4%BD%95%E8%BF%90%E8%A1%8C">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects&#x2F;Array&#x2F;Reduce#reduce()_如何运行</a>)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].<span class="title function_">reduce</span>(<span class="keyword">function</span>(<span class="params">accumulator, currentValue, currentIndex, array</span>)&#123;</span><br><span class="line">  <span class="keyword">return</span> accumulator + currentValue;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>调用顺序</p>
+<table>
+<thead>
+<tr>
+<th>callback</th>
+<th>acc</th>
+<th>cur value</th>
+<th>cur index</th>
+<th>array</th>
+<th>return value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>first call</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>[0, 1, 2, 3, 4]</td>
+<td>1</td>
+</tr>
+<tr>
+<td>second call</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>[0, 1, 2, 3, 4]</td>
+<td>3</td>
+</tr>
+<tr>
+<td>third call</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>[0, 1, 2, 3, 4]</td>
+<td>6</td>
+</tr>
+<tr>
+<td>fourth call</td>
+<td>6</td>
+<td>4</td>
+<td>4</td>
+<td>[0, 1, 2, 3, 4]</td>
+<td>10</td>
+</tr>
+</tbody></table>
+<p>reduce的执行是给定一个函数，将所有的元素传入这个函数，每次函数的执行结果作为下一次的执行参数。如果没有给定初始值，第一次传入的是第一个和第二个元素。</p>
+<p>假设现在有a,b,c三个函数，</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">a</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;a&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">b</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;b&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">c</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="comment">// console.log(n)</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;c&#x27;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最简单的使用</p>
+<pre><code>[a,b,c].reduce((a,b)=&gt;a(b()));
+</code></pre>
+<p>是什么结果呢？</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">b</span><br><span class="line">a</span><br><span class="line">c </span><br><span class="line">TypeError: a is not a <span class="keyword">function</span></span><br><span class="line">    at chain.reduce (d:\workspace\learn\compose.js:12:39)</span><br><span class="line">    at Array.reduce (&lt;anonymous&gt;)</span><br><span class="line">    at Object.&lt;anonymous&gt; (d:\workspace\learn\compose.js:12:23)</span><br><span class="line">    at Module._compile (internal/modules/cjs/loader.js:773:14)</span><br><span class="line">    at Object.Module._extensions..js (internal/modules/cjs/loader.js:787:10)</span><br><span class="line">    at Module.load (internal/modules/cjs/loader.js:653:32)</span><br><span class="line">    at tryModuleLoad (internal/modules/cjs/loader.js:593:12)</span><br><span class="line">    at Function.Module._load (internal/modules/cjs/loader.js:585:3)</span><br><span class="line">    at Function.Module.runMain (internal/modules/cjs/loader.js:829:12)</span><br><span class="line">    at startup (internal/bootstrap/node.js:283:19)</span><br></pre></td></tr></table></figure>
+<p>这里出错了，是什么原因呢？</p>
+<p>第一次循环，实际执行是a(b()),先执行b，在执行a。所以打印b, a。第二次循环，之前的返回是一个函数执行，b执行完之后的结果作为参数传入a，a执行完之后返回undefined，所以此时a就是undefined。所以实际执行就是undefined(c())。</p>
+<p>可以看出是第一次没有返回值导致的错误。所以关键是在这个执行的函数中。</p>
+<h3 id="函数闭包"><a href="#函数闭包" class="headerlink" title="函数闭包"></a>函数闭包</h3><p>上面的问题主要有</p>
+<ol>
+<li>我们不知道a是否返回，我们也不可能去修改a中的代码，所以就有调用undefined方法的情况。</li>
+<li>上面的执行顺序也是不对的。</li>
+</ol>
+<p>解决办法其实就是在用一个函数包裹一下，作为返回值。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const chain = [a,b,c,d].reduce((a,b)=&gt;()=&gt;a(b()))</span><br></pre></td></tr></table></figure>
+<p>测试一下，非常完美。</p>
+<ol>
+<li>第一次执行，输入的是a,b。然后返回一个函数，()⇒(a(b())。我们把这个匿名函数叫做acc1。</li>
+<li>第二次执行，输入的是acc1,c。然后返回一个函数()⇒(acc1(c())。</li>
+<li>最后这个chain就是这个样子<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="title function_">acc1</span>(<span class="title function_">c</span>());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>最后执行一次chain()就万事大吉。</li>
+</ol>
+<h3 id="内存泄漏"><a href="#内存泄漏" class="headerlink" title="内存泄漏"></a>内存泄漏</h3><p>既然使用闭包，就会有内存泄露的风险。</p>
+<p>在reduce中，其实是将a,b,c,d这些函数不断包裹在外层包裹闭包。所以对函数要有限制。</p>
+<p>一般v8中的stack的大小为1M左右。根据每个函数的占用字节，就可以算出一共多少函数。</p>
+<h2 id="reduce里面发生了啥"><a href="#reduce里面发生了啥" class="headerlink" title="reduce里面发生了啥"></a>reduce里面发生了啥</h2><p>reduce是一次函数遍历。我们可以通过他的pollyfill来大致了解一下<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce#Polyfill">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects&#x2F;Array&#x2F;Reduce#Polyfill</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (k &lt; len) &#123;</span><br><span class="line">        <span class="keyword">if</span> (k <span class="keyword">in</span> o) &#123;</span><br><span class="line">          value = <span class="title function_">callback</span>(value, o[k], k, o);</span><br><span class="line">        &#125;</span><br><span class="line">        k++;</span><br><span class="line">      &#125;</span><br><span class="line"><span class="keyword">return</span> value;</span><br></pre></td></tr></table></figure>
+<p>比较关键的几行就是这里。将数组里面所有元素遍历，然后每次执行的结果记住，最后将结果返回。</p>
+<h2 id="实际使用"><a href="#实际使用" class="headerlink" title="实际使用"></a>实际使用</h2><p>前文就是理清reduce中的执行过程。那么在实际使用中还要哪些呢？</p>
+<ol>
+<li>参数的传递</li>
+</ol>
+<p>实际中每个处理的函数需要接收参数,参照一下redux中设计 <a target="_blank" rel="noopener" href="https://github.com/reduxjs/redux/blob/master/src/compose.js">https://github.com/reduxjs/redux/blob/master/src/compose.js</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">compose</span>(<span class="params">...funcs</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (funcs.<span class="property">length</span> === <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="params">arg</span> =&gt;</span> arg;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (funcs.<span class="property">length</span> === <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> funcs[<span class="number">0</span>];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> funcs.<span class="title function_">reduce</span>(<span class="function">(<span class="params">a, b</span>) =&gt;</span> <span class="function">(<span class="params">...args</span>) =&gt;</span> <span class="title function_">a</span>(<span class="title function_">b</span>(...args)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>除此之外， mdn也有类似的实现</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">pipe</span> = (<span class="params">...functions</span>) =&gt; <span class="function"><span class="params">input</span> =&gt;</span> functions.<span class="title function_">reduce</span>(</span><br><span class="line">    <span class="function">(<span class="params">acc, fn</span>) =&gt;</span> <span class="title function_">fn</span>(acc),</span><br><span class="line">    input</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>具体使用都是一样的。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/07/16/github-pages-introduction/" rel="prev" title="github pages使用简介">
+                  <i class="fa fa-angle-left"></i> github pages使用简介
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/07/17/docker-for-dev-env/" rel="next" title="使用docker构建统一的开发环境">
+                  使用docker构建统一的开发环境 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tbswang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"tbswang","count":false,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

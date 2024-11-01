@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.21.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":null,"post_header":null,"post_body":null,"coll_header":null,"sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Abstract从一个初学者的角度,了解rsa的实现过程.在王里冲产出公钥和私钥.私钥自己保留,公钥传送给潘兴.潘兴把使用公钥加密后信息传给王里冲,王里冲可以使用私钥解开加密.获得信息.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rsa的公钥加密私钥解密过程">
+<meta property="og:url" content="http://yoursite.com/2018/04/20/rsa/index.html">
+<meta property="og:site_name" content="tbswang&#39;s blogs">
+<meta property="og:description" content="Abstract从一个初学者的角度,了解rsa的实现过程.在王里冲产出公钥和私钥.私钥自己保留,公钥传送给潘兴.潘兴把使用公钥加密后信息传给王里冲,王里冲可以使用私钥解开加密.获得信息.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-04-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-10-30T08:02:10.787Z">
+<meta property="article:author" content="tbswang">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://yoursite.com/2018/04/20/rsa/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://yoursite.com/2018/04/20/rsa/","path":"2018/04/20/rsa/","title":"rsa的公钥加密私钥解密过程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>rsa的公钥加密私钥解密过程 | tbswang's blogs</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">tbswang's blogs</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract"><span class="nav-number">1.</span> <span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-number">2.</span> <span class="nav-text">前置知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8D%E8%AF%8D%E8%A7%A3%E6%9E%90"><span class="nav-number">2.1.</span> <span class="nav-text">名词解析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">3.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BD%98%E5%85%B4%E5%90%91%E7%8E%8B%E9%87%8C%E5%86%B2%E4%BC%A0%E9%80%92%E4%BF%A1%E6%81%AF-%E5%85%AC%E9%92%A5%E5%8A%A0%E5%AF%86-%E7%A7%81%E9%92%A5%E8%A7%A3%E5%AF%86"><span class="nav-number">3.1.</span> <span class="nav-text">潘兴向王里冲传递信息.(公钥加密, 私钥解密)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-number">6.</span> <span class="nav-text">附录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">tbswang</p>
+  <div class="site-description" itemprop="description">计算机技术</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tbswang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tbswang" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/20/rsa/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tbswang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tbswang's blogs">
+      <meta itemprop="description" content="计算机技术">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="rsa的公钥加密私钥解密过程 | tbswang's blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          rsa的公钥加密私钥解密过程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-04-20 00:00:00" itemprop="dateCreated datePublished" datetime="2018-04-20T00:00:00+08:00">2018-04-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>从一个初学者的角度,了解rsa的实现过程.在王里冲产出公钥和私钥.私钥自己保留,公钥传送给潘兴.潘兴把使用公钥加密后信息传给王里冲,王里冲可以使用私钥解开加密.获得信息.</p>
+<span id="more"></span>
+
+<h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><h3 id="名词解析"><a href="#名词解析" class="headerlink" title="名词解析"></a>名词解析</h3><ul>
+<li>王里冲：秘钥的生成方， 生成公钥和私钥</li>
+<li>潘兴： 当然就是另一方喽</li>
+<li>公钥,私钥 :公钥和私钥实际就分别是两个数对(n,e), (n,d), 其中(n,e)是公钥,(n,d)是私钥.n是两个质数的积.[<a target="_blank" rel="noopener" href="http://blog.51cto.com/dayewo/1117309">1</a>]</li>
+<li>密钥长度: n用二进制表示的时候占用的位数,就是所说的密钥长度.[<a target="_blank" rel="noopener" href="http://blog.51cto.com/dayewo/1117309">1</a>]</li>
+<li>素数: 就是质数.除了1和该数自身外，无法被其他自然数整除的数.(小时候学的数学课本忘记怎么说的.查了一下wiki.(orz))</li>
+</ul>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>故事的背景,王里冲(男一)和潘兴(男二)想要做一个私密的py交易,事先需要沟通信息.这个信息不能别人知道.他们使用rsa.</p>
+<h3 id="潘兴向王里冲传递信息-公钥加密-私钥解密"><a href="#潘兴向王里冲传递信息-公钥加密-私钥解密" class="headerlink" title="潘兴向王里冲传递信息.(公钥加密, 私钥解密)"></a>潘兴向王里冲传递信息.(公钥加密, 私钥解密)</h3><p>潘兴想要发送一段文字: I LOVE YOU!(此处不讨论中文字符).为了完成这个, 主要有三个步骤:</p>
+<ol>
+<li><p>王里冲在自己本地生成公钥和私钥.<br> 王里冲自己随机选择两个素数 p&#x3D;23,q&#x3D;47.可以得到$n&#x3D;p*q&#x3D;53*59&#x3D;3127$</p>
+<p> 根据欧拉函数:<br> $$r&#x3D;\phi(n)&#x3D;(p-1)*(q-1)&#x3D;52*58&#x3D;3106$$<br> 然后,选择一个数字e&#x3D;3, e的选择标准是: e是1和r之间的一个质数,1&lt; e&lt; r.e和r当然也是相互是质数.这里的n和e也是将来分发的公钥.</p>
+<p> 接下来产生私钥,从数学上来讲,就是计算e相对的r的”模反元素”.使用这个公式:</p>
+<p> $$ed ≡ 1 (mod (r))$$</p>
+<p> 这个公式的意思是r对ed取余数是1.<br> 等价于:</p>
+<p> $$ed+k*r&#x3D;1$$</p>
+<p> 也等价于:</p>
+<p> $$ed-1 &#x3D; k*\phi(n)$$</p>
+<p> 带入数据就是:</p>
+<p> $$3*d -1 &#x3D; k * 3106$$</p>
+<p> 其中k是一个常数.这个方程可以用”<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%89%A9%E5%B1%95%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E7%AE%97%E6%B3%95">扩展欧几里得算法(辗转相除法)</a>“求解.</p>
+<p> 最后可以得到 d&#x3D;2011.具体的计算过程放在附录1中.</p>
+<p> 所以公钥(n,e)就是(3127,3),私钥是(n,d)即(3127,2011);</p>
+</li>
+<li><p>王里冲公开发布公钥,所有人都可以得到公钥.当然潘兴也可以获得.这个地方rsa的特性保证了只用公钥不能或者说很难猜出私钥</p>
+</li>
+<li><p>潘兴用这个公钥,加密了自己的信息.通过公网传出给王里冲.</p>
+<p> 此处,潘兴获得的公钥(n,e),(3127,3)</p>
+<p> 由于rsa只能加密数字, 所以只能把要加密的信息按照一定的规则转化为数字.即将明文信息数字化.可以使用Unicode码的序号来表示这串数字.在英文范围内,Unicode与ASCII序号相同.把上面的”I LOVE YOU”转为数字就是<br> [ 73, 32, 76, 79, 86, 69, 32, 89, 79, 85 ]</p>
+<p> js代码实现</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//getCodePoint :: string -&gt; [a]</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getCodePoint</span>(<span class="params">str</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> str.<span class="title function_">split</span>(<span class="string">&#x27;&#x27;</span>).<span class="title function_">map</span>(<span class="function">(<span class="params">e</span>) =&gt;</span> e.<span class="title function_">charCodeAt</span>(<span class="number">0</span>))</span><br><span class="line">    <span class="comment">// console.log(codePoint);</span></span><br><span class="line">&#125;</span><br><span class="line">out = <span class="title function_">getCodePoint</span>(<span class="string">&#x27;I LOVE YOU&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(out);<span class="comment">//[ 73, 32, 76, 79, 86, 69, 32, 89, 79, 85 ]</span></span><br></pre></td></tr></table></figure>
+
+<p> 设待加密的信息m,加密后的信息是c, 然后加密的过程就是 m^e &#x3D; c(mod n) (应该是一个三横线的等号), 等价于 m^e mod n &#x3D; c.</p>
+<p> 在这里还会遇到一个问题就是如果m和e数字比较大的时候, 直接乘方会有数据溢出的风险.所以, 这里有一些专门的算法.可以参考<a target="_blank" rel="noopener" href="http://haoyuanliu.github.io/2016/04/04/get-mod/">附录2的算法</a>.详细的信息可以搜索”高次幂函数取模算法”</p>
+ <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> out = [ <span class="number">73</span>, <span class="number">32</span>, <span class="number">76</span>, <span class="number">79</span>, <span class="number">86</span>, <span class="number">69</span>, <span class="number">32</span>, <span class="number">89</span>, <span class="number">79</span>, <span class="number">85</span> ];</span><br><span class="line"><span class="keyword">const</span> n = <span class="number">3127</span>;</span><br><span class="line"><span class="keyword">const</span> e = <span class="number">3</span>;</span><br><span class="line"><span class="keyword">let</span> c = out.<span class="title function_">map</span>(<span class="function"><span class="params">ele</span> =&gt;</span> ele ** e % <span class="number">3127</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(c);<span class="comment">//[ 1269, 1498, 1196, 2100, 1275, 174, 1498, 1394, 2100, 1233 ]</span></span><br></pre></td></tr></table></figure>
+
+<p> 至此, 潘兴小哥把自己的信息加密好了, 然后通过公网传给王里冲</p>
+</li>
+<li><p>王里冲获得信息,用自己在私钥解密.同样,rsa的特性保证只有私钥才能解密出公钥加密的信息.</p>
+<p> 王总现在取得了潘兴的加密信息,只需要解密就可以看到了.</p>
+<p> 解密的过程和加密及其类似:c^d&#x3D;m(mod n)((应该是一个三横线的等号))<br> ,等价于 c^d mod n &#x3D; m;</p>
+ <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> m = c.<span class="title function_">map</span>(<span class="function"><span class="params">ele</span> =&gt;</span> <span class="title function_">getMod</span>(ele, d, n));</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(m);<span class="comment">//[ 73, 32, 76, 79, 86, 69, 32, 89, 79, 85 ]</span></span><br><span class="line">out = <span class="title class_">String</span>.<span class="title function_">fromCodePoint</span>(...m);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(out);<span class="comment">//I LOVE YOU</span></span><br></pre></td></tr></table></figure>
+<p> 最后, 潘兴终于获得了王里冲发给自己信息.</p>
+</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到目前为止，完成了从公钥加密，私钥解密的过程。 接下来，还有一部分从私钥加密，公钥验证（挖坑），以及数字证书的签名问题(挖坑)。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a target="_blank" rel="noopener" href="http://blog.51cto.com/dayewo/1117309">http://blog.51cto.com/dayewo/1117309</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%89%A9%E5%B1%95%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E7%AE%97%E6%B3%95">扩展欧几里得算法(辗转相除法)</a></li>
+<li><a target="_blank" rel="noopener" href="http://haoyuanliu.github.io/2016/04/04/get-mod/">http://haoyuanliu.github.io/2016/04/04/get-mod/</a></li>
+</ol>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><ol>
+<li>17*d -1 &#x3D; k * 3106的求解.d和k取整数</li>
+</ol>
+<p>把等式右边移到左边, 可以得到 17*d + k*3106 &#x3D; 1.</p>
+<blockquote>
+<p>注意这里k的变成了原来-k,但是对于最终的结果没有影响,因为我们只是想找符合的参数</p>
+</blockquote>
+<p>有两种方法:</p>
+<ul>
+<li><p>方法一:辗转相除法</p>
+<p>  已知:3120y+17x &#x3D; 1</p>
+<ul>
+<li>3120 &#x3D; 17*183+9</li>
+<li>17 &#x3D; 9*1 +8</li>
+<li>9 &#x3D; 8*1 + 1<br>  改写成余数的形式:</li>
+<li>9 &#x3D; 3120*1 + 17*(-183)</li>
+<li>8 &#x3D; 17*1 + 9*(-1)</li>
+<li>1 &#x3D; 9*1 + 8*(-1)</li>
+</ul>
+<p>  从最后一个式子开始, “倒回去” , 把上面式子的结果带入</p>
+<p>  1 &#x3D; 9*1 + 8*(-1) &#x3D;  9*1 + [17*1+9*9(-1)]<br>  &#x3D; 17*(-1)+9*2 &#x3D; 17*(-1) + (3120*1+17*(-183))&#x3D;<br>  3120*2+17*(-367).</p>
+<p>  所以可以得到x&#x3D;-367 , y&#x3D;2;<br>  计算出这个结果之后, 并没有结束,按照wiki的解释, <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%A8%A1%E5%8F%8D%E5%85%83%E7%B4%A0">模逆元</a>, 一般x取最小的正数, x &#x3D; x+ kn &#x3D; -367+k*3120 &#x3D; 2753.所以y &#x3D; 15;</p>
+</li>
+<li><p>方法二: </p>
+<p>  受wiki上一个<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%89%A9%E5%B1%95%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E7%AE%97%E6%B3%95">矩阵解法</a>的启发, 专门去搜了一下, 本质也是辗转相除法, 不过只是用矩阵表示出来.暂时先做记录, 以后可以优化(给自己挖坑)</p>
+<p>  求解过程的来自这里: <a target="_blank" rel="noopener" href="http://www.mast.queensu.ca/~math418/m418oh/m418oh13.pdf">http://www.mast.queensu.ca/~math418/m418oh/m418oh13.pdf</a></p>
+<p>  r_-1 &#x3D; m &#x3D; 3120, r_0 &#x3D; n &#x3D; 17</p>
+<p>  3120&#x2F;17 &#x3D;183…9, r_1 &#x3D; 9, q_1&#x3D; 183</p>
+<p>  17&#x2F;9 &#x3D; 1…8, r_2 &#x3D; 8, q_2&#x3D;1</p>
+<p>  9&#x2F;8&#x3D;1…1, r_3&#x3D;1, q_3&#x3D;1</p>
+<p>  8&#x2F;1&#x3D;8…0, r_4&#x3D;0,q_4&#x3D;8</p>
+<p>  构造如下的矩阵<br>  每一次经过一个初等行变换</p>
+<p>  $$<br>  \left(\begin{array}{cc}<br>  1 &amp; 0 &amp; 3120\<br>  0&amp; 1 &amp; 17<br>  \end{array}\right)<br>  $$ </p>
+<p>  $$<br>  \left(\begin{array}{cc}<br>  0 &amp; 1 &amp; 17\<br>  1&amp; -183 &amp; 9<br>  \end{array}\right)<br>  $$ </p>
+<p>  $$<br>  \left(\begin{array}{cc}<br>  1&amp; -183 &amp; 9\<br>  -1&amp; 184 &amp; 8<br>  \end{array}\right)<br>  $$ </p>
+<p>  $$<br>  \left(\begin{array}{cc}<br>  -1&amp; 184 &amp; 8\<br>  2&amp; -367 &amp; 1<br>  \end{array}\right)<br>  $$ </p>
+<p>  $$<br>  \left(\begin{array}{cc}<br>  -1&amp; 184 &amp; 8\<br>  2&amp; -367 &amp; 1<br>  \end{array}\right)<br>  $$ </p>
+<p>  $$<br>  \left(\begin{array}{cc}<br>  2&amp; -367 &amp; 1\<br>  -17&amp; 3120 &amp; 0<br>  \end{array}\right)<br>  $$ </p>
+<p>  2.暴力方法</p>
+<p>  数学原理:TODO</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//a^b mod c</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getMod</span>(<span class="params">a, b, c</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> result = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (b--) &#123;</span><br><span class="line">        result = result * a % c;<span class="comment">//这个算法的核心就是在迭代运算过程中进行取模运算</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>mathjax中书写公式: <a target="_blank" rel="noopener" href="https://www.zybuluo.com/Cesar/note/228458">https://www.zybuluo.com/Cesar/note/228458</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/12/03/mocha-istanbul/" rel="prev" title="nodejs使用mocha输出测试结果和使用istanbul输出覆盖率">
+                  <i class="fa fa-angle-left"></i> nodejs使用mocha输出测试结果和使用istanbul输出覆盖率
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/06/05/hyperledger-fabric-ca%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97(1.0)/" rel="next" title="hyperledger-fabric-ca用户指南(1.0)">
+                  hyperledger-fabric-ca用户指南(1.0) <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tbswang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"tbswang","count":false,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.21.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":null,"post_header":null,"post_body":null,"coll_header":null,"sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="原文: https:&#x2F;&#x2F;www.ibm.com&#x2F;blogs&#x2F;research&#x2F;2020&#x2F;06&#x2F;ibm-releases-fully-homomorphic-encryption-toolkit-for-macos-and-ios-linux-and-android-coming-soon&#x2F; 通常,当我和别人解释全同态加密的时候,我就说,虽然我已经在这个领域工作了将近十年, 但我也必须停下来拼出来.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="全同态加密">
+<meta property="og:url" content="http://yoursite.com/2020/06/13/Fully-Homomorphic-Encryption/index.html">
+<meta property="og:site_name" content="tbswang&#39;s blogs">
+<meta property="og:description" content="原文: https:&#x2F;&#x2F;www.ibm.com&#x2F;blogs&#x2F;research&#x2F;2020&#x2F;06&#x2F;ibm-releases-fully-homomorphic-encryption-toolkit-for-macos-and-ios-linux-and-android-coming-soon&#x2F; 通常,当我和别人解释全同态加密的时候,我就说,虽然我已经在这个领域工作了将近十年, 但我也必须停下来拼出来.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.ibm.com/blogs/research/wp-content/uploads/2020/06/FHE.png">
+<meta property="article:published_time" content="2020-06-13T11:58:43.000Z">
+<meta property="article:modified_time" content="2024-10-30T08:02:10.817Z">
+<meta property="article:author" content="tbswang">
+<meta property="article:tag" content="翻译">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.ibm.com/blogs/research/wp-content/uploads/2020/06/FHE.png">
+
+
+<link rel="canonical" href="http://yoursite.com/2020/06/13/Fully-Homomorphic-Encryption/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://yoursite.com/2020/06/13/Fully-Homomorphic-Encryption/","path":"2020/06/13/Fully-Homomorphic-Encryption/","title":"全同态加密"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>全同态加密 | tbswang's blogs</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">tbswang's blogs</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFFHE"><span class="nav-number">1.</span> <span class="nav-text">什么是FHE?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1970%E5%8F%8A%E4%B9%8B%E5%89%8D"><span class="nav-number">2.</span> <span class="nav-text">1970及之前</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">用例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%99%E6%88%91%E5%BA%B7%E5%BA%B7%E8%BF%99%E4%B8%AA%E5%B7%A5%E5%85%B7%E9%9B%86"><span class="nav-number">4.</span> <span class="nav-text">给我康康这个工具集</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">tbswang</p>
+  <div class="site-description" itemprop="description">计算机技术</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tbswang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tbswang" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/13/Fully-Homomorphic-Encryption/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tbswang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tbswang's blogs">
+      <meta itemprop="description" content="计算机技术">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="全同态加密 | tbswang's blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          全同态加密
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-13 19:58:43" itemprop="dateCreated datePublished" datetime="2020-06-13T19:58:43+08:00">2020-06-13</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>原文: <a target="_blank" rel="noopener" href="https://www.ibm.com/blogs/research/2020/06/ibm-releases-fully-homomorphic-encryption-toolkit-for-macos-and-ios-linux-and-android-coming-soon/">https://www.ibm.com/blogs/research/2020/06/ibm-releases-fully-homomorphic-encryption-toolkit-for-macos-and-ios-linux-and-android-coming-soon/</a></p>
+<p>通常,当我和别人解释全同态加密的时候,我就说,虽然我已经在这个领域工作了将近十年, 但我也必须停下来拼出来.所以,让我们就简单的把它叫做FHE.</p>
+<p>半开玩笑的讲,当你第一次听到FHE,它听起来就像是魔法, 但是他是基于非常安全的数学.主要的区别是,FHE需要对我们常用的编程范式做一些转换,这让她在转换为应用的时候有点困难.直到今天,多亏了我们在macos,ios和接下来的linux和安卓的新工具包,才让他变得可用.事实上,对基本的平台工具熟悉的开发者, 根据一些简单的介绍,就可以快速的上手.将11年的顶级加密研究,在泡一杯咖啡或者整理桌子的时间内,转换为免费的,开发者可用的,是一个不小的壮举.<br><img data-src="https://www.ibm.com/blogs/research/wp-content/uploads/2020/06/FHE.png"></p>
+<span id="more"></span>
+
+<h2 id="什么是FHE"><a href="#什么是FHE" class="headerlink" title="什么是FHE?"></a>什么是FHE?</h2><p>通常用来给同事和合作伙伴存储和分享数据的方法有风险.现在,文件在传输存储的时候加密,但是在使用的时候解密.这就给黑客和内部的人很多机会泄露未加密的数据.FHE补上了这个漏洞.这可以让数据在加密的时候,让有权限的合作伙伴操作数据,这减少了他在最脆弱状态的次数.</p>
+<p>与其他技术联合,FHE也可以有选择的加密,所以人们只能看到他们可以访问的那一部分文件,或者他们工作所必须的文件.</p>
+<h2 id="1970及之前"><a href="#1970及之前" class="headerlink" title="1970及之前"></a>1970及之前</h2><p>FHE最早在1970年被提出讨论,但是真正的突破在2009,5月31号的acm会议,彼时才被证明, 加密学者Craig Gentry,在他高引用论文.ß</p>
+<p>虽然这篇论文是一个令人激动是新闻,但是很多工业界的人认为FHE还是只能存在于加密领域,因为他的计算的复杂性,需要巨量的算力,这对于日常使用来说就太慢了.<br>多亏了一个在ibm的小团队,把这个作为一个挑战,十年后FHE的性能需求,对于一些应用就足够了. 他们需要提高算法的先进性和未来的硬件加速.</p>
+<h2 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h2><p>FHE给许多应用提供了希望,比如从隐私数据中提取价值;数据集合交叉;基因分析;无意识查询(比如,不带有明显意图的查询)和安全外包.</p>
+<p>FHE特别适用于一些受管制和使用隐私,加密的,’皇冠宝石’数据的行业.比如金融和健康.因为这项技术可以让分享金融信息或者私人的健康记录变得可能,同时限制他们只是用有限的数据而不是全部.</p>
+<p>比如,我们最近发布了一片论文,我们同态加密了数据和模型,展示了, 与未加密的数据有相同的预测精度,而且有合适的性能.这个结果表明, 银行可以安全的外包哪些运行预测任务到不可信的环境中.</p>
+<h2 id="给我康康这个工具集"><a href="#给我康康这个工具集" class="headerlink" title="给我康康这个工具集"></a>给我康康这个工具集</h2><p>新的FHE工具集,适合于macos和ios在github,linux和Android几周后发布.每个工具都是基于HELib,世界上最成熟和通用的加密库,里面有示例代码非常容易的写出基于FHE的代码.</p>
+<p>IOS工具包包括一个简单易用的demo, 演示了针对加密数据库的隐私保护搜索.这个数据库是kv存储,预先存储了欧洲国家的名字和他们的首都.选择一个国家会显示他们的首都.</p>
+<p>需要指出的是,这不是最终完美的方案.我们希望尽快将这些概念付诸实施，将技术交到早期采用者手中，他们希望在我们建立用户和用例社区的过程中，使这些概念不那么抽象和具体。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BF%BB%E8%AF%91/" rel="tag"># 翻译</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/05/26/The-most-characters-in-a-string/" rel="prev" title="字符串中最多的字符">
+                  <i class="fa fa-angle-left"></i> 字符串中最多的字符
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/06/17/vscode-cra-debug/" rel="next" title="vscode-cra-debug">
+                  vscode-cra-debug <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tbswang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"tbswang","count":false,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

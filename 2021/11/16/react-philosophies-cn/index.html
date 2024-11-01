@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.21.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":null,"post_header":null,"post_body":null,"coll_header":null,"sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="原文： https:&#x2F;&#x2F;github.com&#x2F;mithi&#x2F;react-philosophies   0.介绍react哲学是：  我在编写React代码时会考虑的事情。 每当我查看别人或我自己的代码时，我都会想到 只是指导方针，而不是严格的规则 一个动态的文件，随着我的经验增长和时间变化而变化 大多数技术是基本重构方法、SOLID原则和极端编程思想的变体……只是专门应用于React🙂  rea">
+<meta property="og:type" content="article">
+<meta property="og:title" content="react哲学">
+<meta property="og:url" content="http://yoursite.com/2021/11/16/react-philosophies-cn/index.html">
+<meta property="og:site_name" content="tbswang&#39;s blogs">
+<meta property="og:description" content="原文： https:&#x2F;&#x2F;github.com&#x2F;mithi&#x2F;react-philosophies   0.介绍react哲学是：  我在编写React代码时会考虑的事情。 每当我查看别人或我自己的代码时，我都会想到 只是指导方针，而不是严格的规则 一个动态的文件，随着我的经验增长和时间变化而变化 大多数技术是基本重构方法、SOLID原则和极端编程思想的变体……只是专门应用于React🙂  rea">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-11-16T05:09:00.000Z">
+<meta property="article:modified_time" content="2024-10-30T08:02:10.839Z">
+<meta property="article:author" content="tbswang">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://yoursite.com/2021/11/16/react-philosophies-cn/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://yoursite.com/2021/11/16/react-philosophies-cn/","path":"2021/11/16/react-philosophies-cn/","title":"react哲学"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>react哲学 | tbswang's blogs</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">tbswang's blogs</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">0.介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%9C%80%E4%BD%8E%E9%99%90%E5%BA%A6"><span class="nav-number">2.</span> <span class="nav-text">1.最低限度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%84%8F%E8%AF%86%E5%88%B0%E4%BD%95%E6%97%B6%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%AF%94%E4%BD%A0%E8%81%AA%E6%98%8E"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 意识到何时计算机比你聪明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E4%BB%A3%E7%A0%81%E6%98%AF%E7%BD%AA%E6%81%B6%E4%B9%8B%E6%BA%90"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 代码是罪恶之源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-1-%E5%9C%A8%E6%B7%BB%E5%8A%A0%E5%8F%A6%E4%B8%80%E4%B8%AA%E4%BE%9D%E8%B5%96%E9%A1%B9%E4%B9%8B%E5%89%8D%E8%A6%81%E4%B8%89%E6%80%9D"><span class="nav-number">2.3.</span> <span class="nav-text">1.2.1 在添加另一个依赖项之前要三思</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-2-%E4%BD%BF%E7%94%A8%E9%9D%9E-React-%E7%8B%AC%E5%8D%A0%E7%9A%84%E6%8A%80%E6%9C%AF%E6%B8%85%E7%90%86%E4%BB%A3%E7%A0%81"><span class="nav-number">2.4.</span> <span class="nav-text">1.2.2 使用非 React 独占的技术清理代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-3-%E4%B8%8D%E8%A6%81%E8%81%AA%E6%98%8E%E3%80%82%E6%82%A8%E6%98%AF%E4%B8%8D%E6%98%AF%E8%A6%81%E5%8E%BB%E9%9C%80%E8%A6%81%E5%AE%83-You-Ain%E2%80%99t-Gonna-Need-it-%EF%BC%81"><span class="nav-number">2.5.</span> <span class="nav-text">1.2.3 不要聪明。您是不是要去需要它(You Ain’t Gonna Need it)！</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E8%AE%A9%E5%AE%83%E6%AF%94%E4%BD%A0%E5%8F%91%E7%8E%B0%E5%AE%83%E7%9A%84%E6%97%B6%E5%80%99%E6%9B%B4%E5%A5%BD"><span class="nav-number">2.6.</span> <span class="nav-text">1.3 让它比你发现它的时候更好</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E4%BD%A0%E5%8F%AF%E4%BB%A5%E5%81%9A%E7%9A%84%E6%9B%B4%E5%A5%BD"><span class="nav-number">2.7.</span> <span class="nav-text">1.4 你可以做的更好</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%A7%98-2-%E4%B8%BA%E5%B9%B8%E7%A6%8F%E8%80%8C%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.</span> <span class="nav-text">🧘 2. 为幸福而设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%F0%9F%92%96-%E5%88%A0%E9%99%A4%E5%86%97%E4%BD%99%E7%8A%B6%E6%80%81%E6%9D%A5%E9%81%BF%E5%85%8D%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E7%9A%84%E5%A4%8D%E6%9D%82%E6%80%A7"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 💖 删除冗余状态来避免状态管理的复杂性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%99%88-%E7%A4%BA%E4%BE%8B-1"><span class="nav-number">3.2.</span> <span class="nav-text">🙈 示例 1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%99%88-%E7%A4%BA%E4%BE%8B-2"><span class="nav-number">3.3.</span> <span class="nav-text">🙈 示例 2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%96-2-2-%E4%BC%A0%E9%80%92%E9%A6%99%E8%95%89%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E6%8B%BF%E7%9D%80%E9%A6%99%E8%95%89%E7%9A%84%E5%A4%A7%E7%8C%A9%E7%8C%A9%E5%92%8C%E6%95%B4%E4%B8%AA%E4%B8%9B%E6%9E%97"><span class="nav-number">3.4.</span> <span class="nav-text">💖 2.2 传递香蕉，而不是拿着香蕉的大猩猩和整个丛林</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%96-2-3-%E4%BF%9D%E6%8C%81%E4%BD%A0%E7%9A%84%E7%BB%84%E4%BB%B6%E5%B0%8F%E8%80%8C%E7%AE%80%E5%8D%95"><span class="nav-number">3.5.</span> <span class="nav-text">💖 2.3 保持你的组件小而简单</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%96-2-4-%E5%A4%8D%E5%88%B6%E6%AF%94%E9%94%99%E8%AF%AF%E7%9A%84%E6%8A%BD%E8%B1%A1%E4%BE%BF%E5%AE%9C%E5%BE%97%E5%A4%9A"><span class="nav-number">3.6.</span> <span class="nav-text">💖 2.4 复制比错误的抽象便宜得多</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%A7%98-3-%E6%80%A7%E8%83%BD%E6%8F%90%E7%A4%BA"><span class="nav-number">4.</span> <span class="nav-text">🧘 3. 性能提示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%A7%98-4-Testing-principles"><span class="nav-number">5.</span> <span class="nav-text">🧘 4. Testing principles</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">tbswang</p>
+  <div class="site-description" itemprop="description">计算机技术</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tbswang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tbswang" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/11/16/react-philosophies-cn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tbswang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tbswang's blogs">
+      <meta itemprop="description" content="计算机技术">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="react哲学 | tbswang's blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          react哲学
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-11-16 13:09:00" itemprop="dateCreated datePublished" datetime="2021-11-16T13:09:00+08:00">2021-11-16</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>原文： <a target="_blank" rel="noopener" href="https://github.com/mithi/react-philosophies">https://github.com/mithi/react-philosophies</a> </p>
+</blockquote>
+<h2 id="0-介绍"><a href="#0-介绍" class="headerlink" title="0.介绍"></a>0.介绍</h2><p>react哲学是：</p>
+<ul>
+<li>我在编写React代码时会考虑的事情。</li>
+<li>每当我查看别人或我自己的代码时，我都会想到</li>
+<li>只是指导方针，而不是严格的规则</li>
+<li>一个动态的文件，随着我的经验增长和时间变化而变化</li>
+<li>大多数技术是基本<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Code_refactoring">重构</a>方法、<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/SOLID">SOLID</a>原则和<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Extreme_programming">极端编程</a>思想的变体……只是专门应用于React🙂</li>
+</ul>
+<p><code>react-哲学</code> 的灵感来自我在编码之旅的不同阶段， 在不同地方的偶然发现。</p>
+<p>这里有几个：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://sandimetz.com/">桑迪梅斯</a></li>
+<li><a target="_blank" rel="noopener" href="https://kentcdodds.com/">肯特·C·多兹</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.python.org/dev/peps/pep-0020/">Python 之禅（PEP 20）</a>，<a target="_blank" rel="noopener" href="https://dave.cheney.net/2020/02/23/the-zen-of-go">Go 之禅</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/trekhleb/state-of-the-art-shitcode">trekhleb&#x2F;state-of-the-art-shitcode</a> , <a target="_blank" rel="noopener" href="https://github.com/Droogans/unmaintainable-code">droogans&#x2F;unmaintainable-code</a> , <a target="_blank" rel="noopener" href="https://github.com/sapegin/washingcode-book/">sapegin&#x2F;washingcode-book</a> , <a target="_blank" rel="noopener" href="https://wiki.c2.com/">wiki.c2.com</a></li>
+</ul>
+<blockquote>
+<p>作为一名经验丰富的开发人员，我有一些我所依赖的怪癖、观点和常见模式。不得不向另一个人解释为什么我会以特定的方式解决问题，这对于帮助我改掉坏习惯和挑战我的假设，或为良好的问题解决技巧提供验证真的很有好处。-卡洛琳阿达Ehmke</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="1-最低限度"><a href="#1-最低限度" class="headerlink" title="1.最低限度"></a>1.最低限度</h2><h3 id="1-1-意识到何时计算机比你聪明"><a href="#1-1-意识到何时计算机比你聪明" class="headerlink" title="1.1 意识到何时计算机比你聪明"></a>1.1 意识到何时计算机比你聪明</h3><ol>
+<li>使用<a target="_blank" rel="noopener" href="https://eslint.org/">ESLint</a>静态分析代码。启用<a target="_blank" rel="noopener" href="https://www.npmjs.com/package/eslint-plugin-react-hooks">rule-of-hooks</a>和<code>exhaustive-deps</code>规则以捕获 React 特定错误。</li>
+<li>启用<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode">“严格”</a>模式。现在是 2021 年。</li>
+<li><a target="_blank" rel="noopener" href="https://overreacted.io/a-complete-guide-to-useeffect/#two-ways-to-be-honest-about-dependencies">认真对待依赖</a>。修复useMemo、useCallback 和 useEffect 上的<code>exhaustive-deps</code>警告&#x2F;错误。你可以尝试<a target="_blank" rel="noopener" href="https://epicreact.dev/the-latest-ref-pattern-in-react">“最新的ref模式”</a>来使您的回调始终保持最新状态，而无需进行不必要的重新渲染。</li>
+<li>每当您用于map显示组件时，请<a target="_blank" rel="noopener" href="https://epicreact.dev/why-react-needs-a-key-prop">始终添加key</a>。</li>
+<li><a target="_blank" rel="noopener" href="https://reactjs.org/docs/hooks-rules.html">只在顶层调用hooks</a>。不要在循环、条件或嵌套函数中调用 Hook。</li>
+<li>了解警告“<a target="_blank" rel="noopener" href="https://github.com/facebook/react/pull/22114">Can’t perform state update on unmounted component</a>”</li>
+<li>通过在应用程序的添加不同级别<a target="_blank" rel="noopener" href="https://reactjs.org/docs/error-boundaries.html">错误边界来</a>防止<a target="_blank" rel="noopener" href="https://kentcdodds.com/blog/use-react-error-boundary-to-handle-errors-in-react">“白屏死机”</a>。如有必要，您还可以使用它们向错误监控服务（例如<a target="_blank" rel="noopener" href="https://sentry.io/">Sentry）</a>发送警报。（<a target="_blank" rel="noopener" href="https://brandondail.com/posts/fault-tolerance-react">在 React 中考虑失败</a>）</li>
+<li>控制台中显示错误和警告是有原因的。</li>
+<li>记住<a target="_blank" rel="noopener" href="https://webpack.js.org/guides/tree-shaking/">tree-shaking</a>！</li>
+<li><a target="_blank" rel="noopener" href="https://prettier.io/">Prettier</a>（或其他替代）为您格式化代码，每次都为您提供一致的格式。您不再需要考虑它！</li>
+<li><a target="_blank" rel="noopener" href="https://www.typescriptlang.org/">Typescript</a> 会让你的生活更轻松。</li>
+<li>我强烈推荐<a target="_blank" rel="noopener" href="https://codeclimate.com/quality/">Code Climate</a>（或类似的）用于开源存储库，或者如果你负担得起的话。我发现自动检测到的代码坏味道确实鼓励我， 去减少正在开发应用程序的技术债！</li>
+<li><a target="_blank" rel="noopener" href="https://nextjs.org/">NextJS</a> 是一个很棒的框架。</li>
+</ol>
+<h3 id="1-2-代码是罪恶之源"><a href="#1-2-代码是罪恶之源" class="headerlink" title="1.2 代码是罪恶之源"></a>1.2 代码是罪恶之源</h3><blockquote>
+<p>“最好的代码根本就是没有代码。你引入世界的每一行新代码， 都是必须被调试的、被阅读和理解、必须被支持的代码。” - Jeff Atwood</p>
+</blockquote>
+<blockquote>
+<p>“我最有成效的日子之一就是扔掉 1000 行代码。” - Eric S. Raymond</p>
+</blockquote>
+<p>另外参阅： <a target="_blank" rel="noopener" href="https://svelte.dev/blog/write-less-code">Write Less Code - Rich Harris</a>, <a target="_blank" rel="noopener" href="https://github.com/sapegin/washingcode-book/blob/master/manuscript/Code_is_evil.md">Code is evil - Artem Sapegin</a></p>
+<p><strong>TL;DR</strong></p>
+<ol>
+<li>在添加另一个依赖之前，要三思</li>
+<li>使用非 React 独占的技术清理代码</li>
+<li>不要聪明。你是不是需要它(You Ain’t Gonna Need it)！</li>
+</ol>
+<h3 id="1-2-1-在添加另一个依赖项之前要三思"><a href="#1-2-1-在添加另一个依赖项之前要三思" class="headerlink" title="1.2.1 在添加另一个依赖项之前要三思"></a>1.2.1 在添加另一个依赖项之前要三思</h3><p>不用说，添加的依赖项越多，发送到浏览器的代码就越多。问问自己，你真的需要那些让一个类库变得优秀的特性吗？</p>
+<ul>
+<li><strong>🙈 你真的需要吗？</strong><em>查看您可能不需要的依赖项&#x2F;代码示例</em><ol>
+<li>你真的需要<a target="_blank" rel="noopener" href="https://redux.js.org/">Redux</a>吗？这是可能的。但请记住，React 已经是一个<a target="_blank" rel="noopener" href="https://kentcdodds.com/blog/application-state-management-with-react">状态管理库</a>。</li>
+<li>你真的需要<a target="_blank" rel="noopener" href="https://www.apollographql.com/docs/react/">Apollo client</a>吗？Apollo 客户端有许多很棒的功能，比如手动规范化。但是，它会显着增加您的dist包大小。如果您的应用程序仅使用并非 Apollo 客户端独有的功能，请考虑使用较小的库，例如<a target="_blank" rel="noopener" href="https://react-query.tanstack.com/comparison">react-query</a>或<a target="_blank" rel="noopener" href="https://github.com/vercel/swr">SWR</a>（或根本不使用）。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/axios/axios">Axios</a>? Axios 是一个很棒的库，其功能不易被原生fetch. 但是如果使用 Axios 的唯一原因是它有一个更好看的 API，那么考虑只在 fetch 之上使用一个包装器（例如<a target="_blank" rel="noopener" href="https://github.com/developit/redaxios">redaxios</a>或你自己的）。确定您的应用程序是否真正使用了 Axios 的最佳功能。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/MikeMcl/decimal.js/">Decimal.js</a>? 也许<a target="_blank" rel="noopener" href="https://github.com/MikeMcl/big.js/">Big.js</a>或<a target="_blank" rel="noopener" href="https://www.npmtrends.com/big.js-vs-bignumber.js-vs-decimal.js-vs-mathjs">其他较小的库</a>就足够了。</li>
+<li><a target="_blank" rel="noopener" href="https://lodash.com/">Lodash</a>&#x2F; <a target="_blank" rel="noopener" href="https://underscorejs.org/">underscoreJS</a>? <a target="_blank" rel="noopener" href="https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore">你不需要&#x2F;你不需要Lodash-Underscore</a></li>
+<li><a target="_blank" rel="noopener" href="https://momentjs.com/">MomentJS</a>? <a target="_blank" rel="noopener" href="https://github.com/you-dont-need/You-Dont-Need-Momentjs">你不需要&#x2F;你不需要-Momentjs</a></li>
+<li>您可能不需要Context来做主题（light&#x2F;dark模式），请考虑使用<a target="_blank" rel="noopener" href="https://epicreact.dev/css-variables">css variables</a>。</li>
+<li>您甚至可能不需要Javascript. CSS 很强大。<a target="_blank" rel="noopener" href="https://github.com/you-dont-need/You-Dont-Need-JavaScript">你不需要&#x2F;你不需要JavaScript</a></li>
+</ol>
+</li>
+</ul>
+<h3 id="1-2-2-使用非-React-独占的技术清理代码"><a href="#1-2-2-使用非-React-独占的技术清理代码" class="headerlink" title="1.2.2 使用非 React 独占的技术清理代码"></a>1.2.2 使用非 React 独占的技术清理代码</h3><ol>
+<li>如果可以，请简化<a target="_blank" rel="noopener" href="https://github.com/sapegin/washingcode-book/blob/master/manuscript/Avoid_conditions.md">复杂的条件</a>并尽早退出。</li>
+<li>如果没有明显的性能差异，链式高阶函数代替传统的循环（map，filter，find，findIndex，some，等）</li>
+</ol>
+<h3 id="1-2-3-不要聪明。您是不是要去需要它-You-Ain’t-Gonna-Need-it-！"><a href="#1-2-3-不要聪明。您是不是要去需要它-You-Ain’t-Gonna-Need-it-！" class="headerlink" title="1.2.3 不要聪明。您是不是要去需要它(You Ain’t Gonna Need it)！"></a>1.2.3 不要聪明。您是不是要去需要它(You Ain’t Gonna Need it)！</h3><blockquote>
+<p>“我的软件将来会发生什么？哦，是的，也许这个和那个。让我们实现所有这些东西，因为我们正在研究这部分。这样它就可以面向未来。”</p>
+</blockquote>
+<p>总是只在你真正需要它们的时候实现他们，而不是在你预见到你可能需要它们的时候。</p>
+<p>另请参阅：<a target="_blank" rel="noopener" href="https://martinfowler.com/bliki/Yagni.html">Martin Fowler：YAGNI</a>，<a target="_blank" rel="noopener" href="https://wiki.c2.com/?YouArentGonnaNeedIt">C2 Wiki：您不需要它！</a></p>
+<h3 id="1-3-让它比你发现它的时候更好"><a href="#1-3-让它比你发现它的时候更好" class="headerlink" title="1.3 让它比你发现它的时候更好"></a>1.3 让它比你发现它的时候更好</h3><p><strong>检测代码坏味道并根据需要对其进行处理</strong>。</p>
+<p>如果你发现有什么地方不对劲，就当场改正。但是，如果修复不是那么容易，或者您当时没有时间修复它，请至少添加一条注释（FIXME或TODO），并对所识别的问题进行简明的解释。确保每个人都知道它坏了。它向其他人表明您在乎，并且当他们遇到此类事情时也应该这样做。</p>
+<ul>
+<li><strong>查看易于捕捉的代码异味示例</strong><ul>
+<li>❌ 使用大量参数定义的方法或函数</li>
+<li>❌ 可能难以理解的布尔逻辑</li>
+<li>❌ 单个文件中的代码行过多</li>
+<li>❌ 语法相同的重复代码（但格式可能不同）</li>
+<li>❌ 可能难以理解的函数或方法</li>
+<li>❌ 用大量函数或方法定义的类&#x2F;组件</li>
+<li>❌ 单个函数或方法中的代码行过多</li>
+<li>❌ 具有大量返回语句的函数或方法</li>
+<li>❌ 不相同但共享相同结构的重复代码（例如变量名称可能不同）</li>
+</ul>
+</li>
+</ul>
+<p>请记住，代码异味并不一定意味着应该更改代码。代码异味只是告诉您，您也许能想出更好的方法来实现相同的功能。</p>
+<h3 id="1-4-你可以做的更好"><a href="#1-4-你可以做的更好" class="headerlink" title="1.4 你可以做的更好"></a>1.4 你可以做的更好</h3><p><strong>💁‍♀️提示：请记住，您可能不需要将您的state作为依赖项，因为您可以改为传递回调函数。</strong></p>
+<p>您不需要将setState(from useState) 和dispatch(from useReducer) 放入您的依赖数组中，以获取useEffect和 之类的钩子useCallback。ESLint 不会报错，因为 React 保证了它们的稳定性。</p>
+<ul>
+<li><p>查看示例</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">❌ Not-so-good</span><br><span class="line">const decrement = useCallback(() =&gt; setCount(count - 1), [setCount, count])</span><br><span class="line">const decrement = useCallback(() =&gt; setCount(count - 1), [count])</span><br><span class="line"></span><br><span class="line">✅ BETTER</span><br><span class="line">const decrement = useCallback(() =&gt; setCount(count =&gt; (count - 1)), [])</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>💁‍♀️提示：如果您<code>useMemo</code>或<code>useCallback</code>没有依赖项，则您可能使用错误。</strong></p>
+<ul>
+<li><p>查看示例</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">❌ Not-so-good</span><br><span class="line">const MyComponent = () =&gt; &#123;</span><br><span class="line">   const functionToCall = useCallback(x: string =&gt; `Hello $&#123;x&#125;!`,[])</span><br><span class="line">   const iAmAConstant = useMemo(() =&gt; &#123; return &#123;x: 5, y: 2&#125; &#125;, [])</span><br><span class="line">   /* I will use functionToCall and iAmAConstant */</span><br><span class="line">&#125;</span><br><span class="line">       </span><br><span class="line">✅ BETTER </span><br><span class="line">const I_AM_A_CONSTANT =  &#123; x: 5, y: 2 &#125;</span><br><span class="line">const functionToCall = (x: string) =&gt; `Hello $&#123;x&#125;!`</span><br><span class="line">const MyComponent = () =&gt; &#123;</span><br><span class="line">   /* I will use functionToCall and I_AM_A_CONSTANT */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>💁‍♀️ 提示：用钩子包装你的自定义上下文会创建一个更好看的 API</strong></p>
+<p>它不仅看起来更好，而且您还只需导入一件事而不是两件事。</p>
+<ul>
+<li><p>查看示例</p>
+<p>  ❌ Not-so-good</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// you need to import two things every time </span><br><span class="line">import &#123; useContext &#125; from &quot;react&quot;</span><br><span class="line">import &#123; SomethingContext &#125; from &quot;some-context-package&quot;</span><br><span class="line"></span><br><span class="line">function App() &#123;</span><br><span class="line">  const something = useContext(SomethingContext) // looks okay, but could look better</span><br><span class="line">  // blah</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  ✅ Better</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// on one file you declare this hook</span><br><span class="line">function useSomething() &#123;</span><br><span class="line">  const context = useContext(SomethingContext)</span><br><span class="line">  if (context === undefined) &#123;</span><br><span class="line">    throw new Error(&#x27;useSomething must be used within a SomethingProvider&#x27;)</span><br><span class="line">  &#125;</span><br><span class="line">  return context</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line">// you only need to import one thing each time</span><br><span class="line">import &#123; useSomething &#125; from &quot;some-context-package&quot;</span><br><span class="line"></span><br><span class="line">function App() &#123;</span><br><span class="line">  const something = useSomething() // looks better</span><br><span class="line">  // blah</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><a target="_blank" rel="noopener" href="http://sweng.the-davies.net/Home/rustys-api-design-manifesto">编写 API 很难</a>。<code>[README 驱动开发](https://tom.preston-werner.com/2010/08/23/readme-driven-development.html)</code>是一种有助于设计更好 API 的有用技术。我并不是说我们应该如宗教般地使用<a target="_blank" rel="noopener" href="https://rathes.me/blog/en/readme-driven-development/">RDD</a>，只是说它背后的想法很棒。我发现，在实现组件之前， 先编写API（组件如何使用），会比不这样做， 通常会创建一个更好设计的组件</p>
+<h2 id="🧘-2-为幸福而设计"><a href="#🧘-2-为幸福而设计" class="headerlink" title="🧘 2. 为幸福而设计"></a>🧘 2. 为幸福而设计</h2><blockquote>
+<p>“任何傻瓜都可以编写计算机可以理解的代码。而优秀的程序员编写人类可以理解的代码。” - Martin Fowler</p>
+</blockquote>
+<blockquote>
+<p>“阅读和写作的时间比例远远超过 10 比 1。我们不断阅读旧代码，作为编写新代码努力的一部分。所以如果你想快点，如果你想快点完成，如果你希望您的代码易于编写，使其易于阅读。” ——Robert C. Martin（不是说我同意他的政治观点）</p>
+</blockquote>
+<p><strong>TL;DR</strong></p>
+<ol>
+<li>💖 通过删除冗余状态来避免状态管理的复杂性</li>
+<li>💖 传递香蕉，而不是拿着香蕉的大猩猩和整个丛林（更倾向传递原始类型作为了props）</li>
+<li>💖 保持你的组件小而简单——单一职责原则！</li>
+<li>💖 复制比错误的抽象要容易的得多（避免过早&#x2F;不适当的抽象）</li>
+<li>使用组合（<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=3XaXKiXtNjw">Michael Jackson</a>）来避免props透传。<code>Context</code>不是每个状态共享问题的唯一解决方案</li>
+<li>将巨型<code>useEffect</code>拆分为更小的、独立的部分 （<a target="_blank" rel="noopener" href="https://epicreact.dev/myths-about-useeffect">KCD：关于 useEffect 的神话</a>）</li>
+<li>将逻辑提取到hooks和辅助函数中</li>
+<li>要拆分一个大组件，拥有<code>logical</code>和<code>presentational</code>组件可能是个好主意（但不一定，请使用您的最佳判断）</li>
+<li>更喜欢将原始类型作为<code>useCallback</code> ,<code>useMemo</code>以及<code>useEffect</code>的依赖</li>
+<li>不要给 <code>useCallback</code>, <code>useMemo</code>, and <code>useEffect</code>太多的依赖</li>
+<li>为简单起见， 如果state的某些值依赖于state和先前state的其他值， 不要使用多个<code>useState</code>，而是考虑使用<code>useReducer</code></li>
+<li><code>Context</code>不必是您的整个应用程序全局变量。把<code>Context</code>放在组件树中尽可能低的位置。这与变量、注释、状态（以及一般代码）的就近原则的方式一样。</li>
+</ol>
+<h3 id="2-1-💖-删除冗余状态来避免状态管理的复杂性"><a href="#2-1-💖-删除冗余状态来避免状态管理的复杂性" class="headerlink" title="2.1 💖 删除冗余状态来避免状态管理的复杂性"></a>2.1 💖 删除冗余状态来避免状态管理的复杂性</h3><p>当您有冗余状态时，某些状态可能会不同步；考虑到复杂的交互序列，您可能会忘记更新它们。除了避免同步错误之外，您还会注意到，它也更容易理解并且需要更少的代码。另请参阅：<a target="_blank" rel="noopener" href="https://kentcdodds.com/blog/dont-sync-state-derive-it">KCD：不同步状态。派生它！</a>,<a target="_blank" rel="noopener" href="https://epic-react-exercises.vercel.app/react/hooks/1">井字游戏</a></p>
+<h3 id="🙈-示例-1"><a href="#🙈-示例-1" class="headerlink" title="🙈 示例 1"></a>🙈 示例 1</h3><ul>
+<li><p>查看业务需求&#x2F;问题陈述</p>
+<p>  您的任务是显示直角三角形的属性</p>
+<ul>
+<li>三边中每一边的长度</li>
+<li>周长</li>
+<li>面积</li>
+</ul>
+<p>  三角形是一个具有两个数字的对象<code>&#123;a: number, b: number&#125;</code>，应该从 API 中获取。这两个数字代表直角三角形的两条短边。
+  </p>
+</li>
+<li><p>❌ 查看不太好的解决方案</p>
+  <figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">TriangleInfo</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> [triangleInfo, setTriangleInfo] = useState&lt;&#123;<span class="attr">a</span>: number, <span class="attr">b</span>: number&#125; | <span class="literal">null</span>&gt;(<span class="literal">null</span>)</span><br><span class="line">  <span class="keyword">const</span> [hypotenuse, setHypotenuse] = useState&lt;number | <span class="literal">null</span>&gt;(<span class="literal">null</span>)</span><br><span class="line">  <span class="keyword">const</span> [perimeter, setPerimeter] = useState&lt;number | <span class="literal">null</span>&gt;(<span class="literal">null</span>)</span><br><span class="line">  <span class="keyword">const</span> [areas, setArea] = useState&lt;number | <span class="literal">null</span>&gt;(<span class="literal">null</span>)</span><br><span class="line"></span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">fetchTriangle</span>().<span class="title function_">then</span>(<span class="function"><span class="params">t</span> =&gt;</span> <span class="title function_">setTriangleInfo</span>(t))</span><br><span class="line">  &#125;, [])</span><br><span class="line"></span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(!triangleInfo) &#123;</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">const</span> &#123; a, b &#125; = triangleInfo</span><br><span class="line">    <span class="keyword">const</span> h = <span class="title function_">computeHypotenuse</span>(a, b)</span><br><span class="line">    <span class="title function_">setHypotenuse</span>(h)</span><br><span class="line">    <span class="keyword">const</span> newArea = <span class="title function_">computeArea</span>(a, b)</span><br><span class="line">    <span class="title function_">setArea</span>(newArea)</span><br><span class="line">    <span class="keyword">const</span> p = <span class="title function_">computePerimeter</span>(a, b, h)</span><br><span class="line">    <span class="title function_">setPerimeter</span>(p)</span><br><span class="line"></span><br><span class="line">  &#125;, [triangleInfo])</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!triangleInfo) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/*** show info here ****/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>✅ View “better” solution</p>
+  <figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">TriangleInfo</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> [triangleInfo, setTriangleInfo] = useState&lt;&#123;</span><br><span class="line">    <span class="attr">a</span>: number;</span><br><span class="line">    <span class="attr">b</span>: number;</span><br><span class="line">  &#125; | <span class="literal">null</span>&gt;(<span class="literal">null</span>)</span><br><span class="line"></span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">fetchTriangle</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">r</span>) =&gt;</span> <span class="title function_">setTriangleInfo</span>(r))</span><br><span class="line">  &#125;, []);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!triangleInfo) &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> &#123; a, b &#125; = triangeInfo</span><br><span class="line">  <span class="keyword">const</span> area = <span class="title function_">computeArea</span>(a, b)</span><br><span class="line">  <span class="keyword">const</span> hypotenuse = <span class="title function_">computeHypotenuse</span>(a, b)</span><br><span class="line">  <span class="keyword">const</span> perimeter = <span class="title function_">computePerimeter</span>(a, b, hypotenuse)</span><br><span class="line"> </span><br><span class="line">  <span class="comment">/*** show info here ****/</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="🙈-示例-2"><a href="#🙈-示例-2" class="headerlink" title="🙈 示例 2"></a>🙈 示例 2</h3><ul>
+<li><p>📝🖊️ 查看业务需求&#x2F;问题陈述</p>
+<p>  假设您被分配设计一个组件，该组件：</p>
+<ol>
+<li>从 API 中获取一个唯一点list</li>
+<li>包括一个按钮， 用<code>x</code> 或者<code>y</code>来排序（升序）</li>
+<li>包括一个按钮来改变<code>maxDistance</code>（每次增加10，初始值应该是100）</li>
+<li>只显示离<code>(0, 0)</code>原点不超过<code>maxDistance</code>的点</li>
+<li>假设列表只有 100 个项目（意味着您无需担心优化）。如果您正在处理大量项目，您可以使用<code>useMemo</code></li>
+</ol>
+</li>
+<li><p>❌ View a not-so-good Solution</p>
+  <figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">type <span class="title class_">SortBy</span> = <span class="string">&#x27;x&#x27;</span> | <span class="string">&#x27;y&#x27;</span></span><br><span class="line"><span class="keyword">const</span> toggle = (<span class="attr">current</span>: <span class="title class_">SortBy</span>): <span class="function"><span class="params">SortBy</span> =&gt;</span> current === <span class="string">&#x27;x&#x27;</span> ? : <span class="string">&#x27;y&#x27;</span> : <span class="string">&#x27;x&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">Points</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> [points, setPoints] = useState&lt;&#123;<span class="attr">x</span>: number, <span class="attr">y</span>: number&#125;[]&gt;([])</span><br><span class="line">  <span class="keyword">const</span> [filteredPoints, setFilteredPoints] = useState&lt;&#123;<span class="attr">x</span>: number, <span class="attr">y</span>: number&#125;[]&gt;([])</span><br><span class="line">  <span class="keyword">const</span> [sortedPoints, setSortedPoints] = useState&lt;&#123;<span class="attr">x</span>: number, <span class="attr">y</span>: number&#125;[]&gt;([])</span><br><span class="line">  <span class="keyword">const</span> [maxDistance, setMaxDistance] = useState&lt;number&gt;(<span class="number">100</span>)</span><br><span class="line">  <span class="keyword">const</span> [sortBy, setSortBy] = useState&lt;<span class="title class_">SortBy</span>&gt;(<span class="string">&#x27;x&#x27;</span>)</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">fetchPoints</span>().<span class="title function_">then</span>(<span class="function"><span class="params">r</span> =&gt;</span> <span class="title function_">setPoints</span>(r))</span><br><span class="line">  &#125;, [])</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> sorted = <span class="title function_">sortPoints</span>(points, sortBy)</span><br><span class="line">    <span class="title function_">setSortedPoints</span>(sorted)</span><br><span class="line">  &#125;, [sortBy, points])</span><br><span class="line"></span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> filtered = sortedPoints.<span class="title function_">filter</span>(<span class="function"><span class="params">p</span> =&gt;</span> <span class="title function_">getDistance</span>(p.<span class="property">x</span>, p.<span class="property">y</span>) &lt; maxDistance)</span><br><span class="line">    <span class="title function_">setFilteredPoints</span>(filtered)</span><br><span class="line">  &#125;, [sortedPoints, maxDistance])</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> otherSortBy = <span class="title function_">toggle</span>(sortBy)</span><br><span class="line">  <span class="keyword">const</span> pointToDisplay = filteredPoints.<span class="title function_">map</span>(</span><br><span class="line">    <span class="function"><span class="params">p</span> =&gt;</span> <span class="language-xml"><span class="tag">&lt;<span class="name">li</span> <span class="attr">key</span>=<span class="string">&#123;</span>`$&#123;<span class="attr">p.x</span>&#125;|&#123;<span class="attr">p.y</span>&#125;`&#125;&gt;</span>(&#123;p.x&#125;, &#123;p.y&#125;)<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;&gt;</span><br><span class="line">      &lt;button onClick=&#123;() =&gt; setSortBy(otherSortBy)&#125;&gt;</span><br><span class="line">        Sort by: &#123;otherSortBy&#125;</span><br><span class="line">      &lt;button&gt;</span><br><span class="line">      &lt;button onClick=&#123;() =&gt; setMaxDistance(maxDistance + 10)&#125;&gt;</span><br><span class="line">        Increase max distance</span><br><span class="line">      &lt;button&gt;</span><br><span class="line">      Showing only points that are less than &#123;maxDistance&#125; units away from origin (0, 0)</span><br><span class="line">      Currently sorted by: &#x27;&#123;sortBy&#125;&#x27; (ascending)</span><br><span class="line">      &lt;ol&gt;&#123;pointToDisplay&#125;&lt;/ol&gt;</span><br><span class="line">    &lt;/&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>✅ View a “better” Solution</p>
+  <figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// <span class="doctag">NOTE:</span> You can also use useReducer instead</span></span><br><span class="line">type <span class="title class_">SortBy</span> = <span class="string">&#x27;x&#x27;</span> | <span class="string">&#x27;y&#x27;</span></span><br><span class="line"><span class="keyword">const</span> toggle = (<span class="attr">current</span>: <span class="title class_">SortBy</span>): <span class="function"><span class="params">SortBy</span> =&gt;</span> current === <span class="string">&#x27;x&#x27;</span> ? : <span class="string">&#x27;y&#x27;</span> : <span class="string">&#x27;x&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">Points</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> [points, setPoints] = useState&lt;&#123;<span class="attr">x</span>: number, <span class="attr">y</span>: number&#125;[]&gt;([])</span><br><span class="line">  <span class="keyword">const</span> [maxDistance, setMaxDistance] = useState&lt;number&gt;(<span class="number">100</span>)</span><br><span class="line">  <span class="keyword">const</span> [sortBy, setSortBy] = useState&lt;<span class="title class_">SortBy</span>&gt;(<span class="string">&#x27;x&#x27;</span>)</span><br><span class="line"></span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">fetchPoints</span>().<span class="title function_">then</span>(<span class="function"><span class="params">r</span> =&gt;</span> <span class="title function_">setPoints</span>(r))</span><br><span class="line">  &#125;, [])</span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> otherSortBy = <span class="title function_">toggle</span>(sortBy)</span><br><span class="line">  <span class="keyword">const</span> filtedPoints = points.<span class="title function_">filter</span>(<span class="function"><span class="params">p</span> =&gt;</span> <span class="title function_">getDistance</span>(p.<span class="property">x</span>, p.<span class="property">y</span>) &lt; maxDistance)</span><br><span class="line">  <span class="keyword">const</span> pointToDisplay = <span class="title function_">sortPoints</span>(filteredPoints, sortBy).<span class="title function_">map</span>(</span><br><span class="line">    <span class="function"><span class="params">p</span> =&gt;</span> <span class="language-xml"><span class="tag">&lt;<span class="name">li</span> <span class="attr">key</span>=<span class="string">&#123;</span>`$&#123;<span class="attr">p.x</span>&#125;|&#123;<span class="attr">p.y</span>&#125;`&#125;&gt;</span>(&#123;p.x&#125;, &#123;p.y&#125;)<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;&gt;</span><br><span class="line">      &lt;button onClick=&#123;() =&gt; setSortBy(otherSortBy)&#125;&gt;</span><br><span class="line">        Sort by: &#123;otherSortBy&#125; &lt;button&gt;</span><br><span class="line">      &lt;button onClick=&#123;() =&gt; setMaxDistance(maxDistance + 10)&#125;&gt;</span><br><span class="line">        Increase max distance</span><br><span class="line">      &lt;button&gt;</span><br><span class="line">      Showing only points that are less than &#123;maxDistance&#125; units away from origin (0, 0)</span><br><span class="line">      Currently sorted by: &#x27;&#123;sortBy&#125;&#x27; (ascending)</span><br><span class="line">      &lt;ol&gt;&#123;pointToDisplay&#125;&lt;/ol&gt;</span><br><span class="line">    &lt;/&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="💖-2-2-传递香蕉，而不是拿着香蕉的大猩猩和整个丛林"><a href="#💖-2-2-传递香蕉，而不是拿着香蕉的大猩猩和整个丛林" class="headerlink" title="💖 2.2 传递香蕉，而不是拿着香蕉的大猩猩和整个丛林"></a>💖 2.2 传递香蕉，而不是拿着香蕉的大猩猩和整个丛林</h3><blockquote>
+<p>你想要一根香蕉，但你得到的是一只拿着香蕉的大猩猩和整个丛林。 - Joe Armstrong</p>
+</blockquote>
+<p>为了避免掉入这个陷阱，传递原始类型（boolean，string，number等）作为props是个好主意。（如果你想React.memo用于优化，传递原始类型也是一个好主意）</p>
+<blockquote>
+<p>一个组件应该只知道完成它的工作必要信息，仅此而已。尽可能地，组件应该能够在不知道其他组件是什么以及它们做什么的情况下， 与他们共同使用。</p>
+</blockquote>
+<p>当我们这样做时，组件会更加松耦合，两个组件之间的依赖程度会更低。在不会影响其他组件， 松耦合使更改、更换或移除组件更容易。<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/2832017/what-is-the-difference-between-loose-coupling-and-tight-coupling-in-the-object-o">stackoverflow:2832017</a></p>
+<p>🙈 Example</p>
+<ul>
+<li><p>📝🖊️ 查看业务需求&#x2F;问题陈述</p>
+<p>  创建一个 MemberCard组件， 显示两个组件：Summary和SeeMore。MemberCard组件在接受一个 id 作为 prop 。MemberCard使用 useMember， 他接受id并返回相应的会员信息。</p>
+  <figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">Member</span> = &#123;</span><br><span class="line">  <span class="attr">id</span>: <span class="built_in">string</span></span><br><span class="line">  <span class="attr">firstName</span>: <span class="built_in">string</span></span><br><span class="line">  <span class="attr">lastName</span>: <span class="built_in">string</span></span><br><span class="line">  <span class="attr">title</span>: <span class="built_in">string</span></span><br><span class="line">  <span class="attr">imgUrl</span>: <span class="built_in">string</span></span><br><span class="line">  <span class="attr">webUrl</span>: <span class="built_in">string</span></span><br><span class="line">  <span class="attr">age</span>: <span class="built_in">number</span></span><br><span class="line">  <span class="attr">bio</span>: <span class="built_in">string</span></span><br><span class="line">  <span class="comment">/****** 100 more fields ******/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  SeeMore组件显示会员的年龄和性别。还有一个按钮，切换年龄和性别的显示和隐藏。</p>
+<p>  Summary组件显示会员的照片. 它还显示他的title,firstName和lastName（例如Mr. Vincenzo Cassano）。单击会员的名称，会跳转对会员的个人站点。该Summary组件还可以具有其他功能。（例如，每当单击此组件时， 字体、图像大小和背景颜色都会随机更改，为简洁起见，我们将其称为“随机样式功能”）</p>
+</li>
+<li><p>❌ View a not-so-good solution</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">const Summary = (&#123; member &#125; : &#123; member: Member &#125;) =&gt; &#123;</span><br><span class="line">  /*** include &quot;the random styling feature&quot; ***/</span><br><span class="line">  return (</span><br><span class="line">    &lt;&gt;</span><br><span class="line">      &lt;img src=&#123;member.imgUrl&#125; /&gt;</span><br><span class="line">      &lt;a href=&#123;member.webUrl&#125; &gt;</span><br><span class="line">        &#123;member.title&#125;. &#123;member.firstName&#125; &#123;member.lastName&#125;</span><br><span class="line">      &lt;/a&gt;</span><br><span class="line">    &lt;/&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const SeeMore = (&#123; member &#125;: &#123; member: Member &#125;) =&gt; &#123;</span><br><span class="line">  const [seeMore, setSeeMore] = useState&lt;boolean&gt;(false)</span><br><span class="line">  return (</span><br><span class="line">    &lt;&gt;</span><br><span class="line">      &lt;button onClick=&#123;() =&gt; setSeeMore(!seeMore)&#125;&gt;</span><br><span class="line">        See &#123;seeMore ? &quot;less&quot; : &quot;more&quot;&#125;</span><br><span class="line">      &lt;/button&gt;</span><br><span class="line">      &#123;seeMore &amp;&amp; &lt;&gt;AGE: &#123;member.age&#125; | BIO: &#123;member.bio&#125;&lt;/&gt;&#125;</span><br><span class="line">    &lt;/&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const MemberCard = (&#123; id &#125;: &#123; id: string &#125;)) =&gt; &#123;</span><br><span class="line">  const member = useMember(id)</span><br><span class="line">  return &lt;&gt;&lt;Summary member=&#123;member&#125; /&gt;&lt;SeeMore member=&#123;member&#125; /&gt;&lt;/&gt;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>✅ View a “better” solution</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">const Summary = (&#123; imgUrl, webUrl, header &#125;: &#123; imgUrl: string, webUrl: string, header: string &#125;) =&gt; &#123;</span><br><span class="line">  /*** include &quot;the random styling feature&quot; ***/</span><br><span class="line">  return (</span><br><span class="line">    &lt;&gt;</span><br><span class="line">      &lt;img src=&#123;imgUrl&#125; /&gt;</span><br><span class="line">      &lt;a href=&#123;webUrl&#125;&gt;&#123;header&#125;&lt;/a&gt;</span><br><span class="line">    &lt;/&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const SeeMore = (&#123; componentToShow &#125;: &#123; componentToShow: ReactNode &#125;) =&gt; &#123;</span><br><span class="line">  const [seeMore, setSeeMore] = useState&lt;boolean&gt;(false)</span><br><span class="line">  return (</span><br><span class="line">    &lt;&gt;</span><br><span class="line">      &lt;button onClick=&#123;() =&gt; setSeeMore(!seeMore)&#125;&gt;</span><br><span class="line">        See &#123;seeMore ? &quot;less&quot; : &quot;more&quot;&#125;</span><br><span class="line">      &lt;/button&gt;</span><br><span class="line">      &#123;seeMore &amp;&amp; &lt;&gt;&#123;componentToShow&#125;&lt;/&gt;&#125;</span><br><span class="line">    &lt;/&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const MemberCard = (&#123; id &#125;: &#123; id: string &#125;) =&gt; &#123;</span><br><span class="line">  const &#123; title, firstName, lastName, webUrl, imgUrl, age, bio &#125; = useMember(id)</span><br><span class="line">  const header = `$&#123;title&#125;. $&#123;firstName&#125; $&#123;lastName&#125;`</span><br><span class="line">  return (</span><br><span class="line">    &lt;&gt;</span><br><span class="line">      &lt;Summary &#123;...&#123; imgUrl, webUrl, header &#125;&#125; /&gt;</span><br><span class="line">      &lt;SeeMore componentToShow=&#123;&lt;&gt;AGE: &#123;age&#125; | BIO: &#123;bio&#125;&lt;/&gt;&#125; /&gt;</span><br><span class="line">    &lt;/&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>注意在✅ “better” solution”，SeeMore 和 Summary组件， 不仅通过Member使用。它可能会被其他对象使用，例如CurrentUser, Pet, Post… 任何需要这些特定功能的东西。</p>
+<h3 id="💖-2-3-保持你的组件小而简单"><a href="#💖-2-3-保持你的组件小而简单" class="headerlink" title="💖 2.3 保持你的组件小而简单"></a>💖 2.3 保持你的组件小而简单</h3><p><strong>什么是单一责任原则？</strong></p>
+<blockquote>
+<p>一个组件应该只有一项工作。它应该做最小的有用的事情。它只有实现其目标责任。</p>
+</blockquote>
+<p>一个有很多功能的组件， 是很难被重复利用的。如果你想重用部分而不是全部功能，它几乎不可能仅提供你需要的功能。 最有可能是与其他的代码纠缠。 一个组件，只做一件事情，并且与应用的其他功能隔离，可以让你不用考虑后果的改变，不用通过复制来实现复用。</p>
+<p><strong>如何知道您的组件是否具有单一职责？</strong></p>
+<blockquote>
+<p>尝试用一句话描述该组件。如果它只负责一件事，那么描述起来应该很简单。如果它使用“and”或“or”这个词，那么你的组件很可能没有通过这个测试。</p>
+</blockquote>
+<p>检查组件的状态、它消耗的 props 和 hooks，以及组件内部声明的变量和方法（不应该太多）。问问你自己：这些东西真的一起工作来实现组件的目的吗？如果其中一些没有，请考虑将它们移到其他地方或将您的大组件分解为较小的组件。</p>
+<p>（以上段落基于我 2015 年的文章：<a target="_blank" rel="noopener" href="https://medium.com/@mithi/review-sandi-metz-s-poodr-ch-1-4-wip-d4daac417665">我作为非 Ruby 程序员从 Sandi Metz 的书中学到的三件事</a>）</p>
+<p>🙈 Example</p>
+<ul>
+<li><p>📝🖊️ 查看业务需求&#x2F;问题陈述</p>
+<p>  要求是显示特殊类型的按钮，您可以单击以购买特定类别的商品。例如，用户可以选择包、椅子和食物。</p>
+<ul>
+<li>每个按钮都会打开一个modal，您可以使用它来选择和“保存”项目</li>
+<li>如果用户“保存”了特定类别中的选定项目，则该类别被称为“已预订”</li>
+<li>如果已预订，该按钮将有一个复选标记</li>
+<li>即使该类别已被预订，您也应该能够编辑您的预订（添加或删除项目）</li>
+<li>如果用户将鼠标悬停在按钮上，它也应该显示WavingHand组件</li>
+<li>当没有该特定类别的项目可用时，也应禁用按钮</li>
+<li>当用户将鼠标悬停在禁用的按钮上时，工具提示应显示“不可用”</li>
+<li>如果该类别没有可用的项目，则按钮的背景应为 grey</li>
+<li>如果类别已预订，则按钮的背景应为 green</li>
+<li>如果该类别有可用项目且未预订，则按钮的背景应为 red</li>
+<li>对于每个类别，它对应的按钮都有一个唯一的标签和图标</li>
+</ul>
+</li>
+<li><p>❌ View a not-so-good solution</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">type ShopCategoryTileProps = &#123;</span><br><span class="line">  isBooked: boolean</span><br><span class="line">  icon: ReactNode</span><br><span class="line">  label: string</span><br><span class="line">  componentInsideModal?: ReactNode</span><br><span class="line">  items?: &#123;name: string, quantity: number&#125;[]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const ShopCategoryTile = (&#123;</span><br><span class="line">  icon,</span><br><span class="line">  label,</span><br><span class="line">  items</span><br><span class="line">  componentInsideModal,</span><br><span class="line">&#125;: ShopCategoryTileProps ) =&gt; &#123;</span><br><span class="line">  const [openDialog, setOpenDialog] = useState(false)</span><br><span class="line">  const [hover, setHover] = useState(false)</span><br><span class="line">  const disabled = !items || items.length  === 0</span><br><span class="line">  return (</span><br><span class="line">    &lt;&gt;</span><br><span class="line">      &lt;Tooltip title=&quot;Not Available&quot; show=&#123;disabled&#125;&gt;</span><br><span class="line">        &lt;StyledButton</span><br><span class="line">          className=&#123;disabled ? &quot;grey&quot; : isBooked ? &quot;green&quot; : &quot;red&quot; &#125;</span><br><span class="line">          disabled=&#123;disabled&#125;</span><br><span class="line">          onClick=&#123;() =&gt; disabled ? null : setOpenDialog(true) &#125;</span><br><span class="line">          onMouseEnter=&#123;() =&gt; disabled ? null : setHover(true)&#125;</span><br><span class="line">          onMouseLeave=&#123;() =&gt; disabled ? null : setHover(false)&#125;</span><br><span class="line">        &gt;</span><br><span class="line">          &#123;icon&#125;</span><br><span class="line">          &lt;StyledLabel&gt;&#123;label&#125;&lt;StyledLabel/&gt;</span><br><span class="line">          &#123;!disabled &amp;&amp; isBooked &amp;&amp; &lt;FaCheckCircle/&gt;&#125;</span><br><span class="line">          &#123;!disabled &amp;&amp; hover &amp;&amp; &lt;WavingHand /&gt;&#125;</span><br><span class="line">        &lt;/StyledButton&gt;</span><br><span class="line">      &lt;/Tooltip&gt;</span><br><span class="line">      &#123;componentInsideModal &amp;&amp;</span><br><span class="line">        &lt;Dialog open=&#123;openDialog&#125; onClose=&#123;() =&gt; setOpenDialog(false)&#125;&gt;</span><br><span class="line">          &#123;componentInsideModal&#125;</span><br><span class="line">        &lt;/Dialog&gt;</span><br><span class="line">      &#125;</span><br><span class="line">    &lt;/&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>✅ View a “better” solution</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">// split into two smaller components!</span><br><span class="line"></span><br><span class="line">const DisabledShopCategoryTile = (&#123; icon, label &#125;: &#123; icon: ReactNode, label: string &#125;) =&gt; &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;Tooltip title=&quot;Not available&quot;&gt;</span><br><span class="line">      &lt;StyledButton disabled=&#123;true&#125; className=&quot;grey&quot;&gt;</span><br><span class="line">        &#123;icon&#125;</span><br><span class="line">        &lt;StyledLabel&gt;&#123;label&#125;&lt;StyledLabel/&gt;</span><br><span class="line">      &lt;/Button&gt;</span><br><span class="line">    &lt;/Tooltip&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type ShopCategoryTileProps = &#123;</span><br><span class="line">  icon: ReactNode</span><br><span class="line">  label: string</span><br><span class="line">  isBooked: boolean</span><br><span class="line">  componentInsideModal: ReactNode</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const ShopCategoryTile = (&#123;</span><br><span class="line">  icon,</span><br><span class="line">  label,</span><br><span class="line">  isBooked,</span><br><span class="line">  componentInsideModal,</span><br><span class="line">&#125;: ShopCategoryTileProps ) =&gt; &#123;</span><br><span class="line">  const [openDialog, setOpenDialog] = useState(false)</span><br><span class="line">  const [hover, setHover] = useState(false)</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;&gt;</span><br><span class="line">      &lt;StyledButton</span><br><span class="line">        disabled=&#123;false&#125;</span><br><span class="line">        className=&#123;isBooked ? &quot;green&quot; : &quot;red&quot;&#125;</span><br><span class="line">        onClick=&#123;() =&gt; setOpenDialog(true) &#125;</span><br><span class="line">        onMouseEnter=&#123;() =&gt; setHover(true)&#125;</span><br><span class="line">        onMouseLeave=&#123;() =&gt; setHover(false)&#125;</span><br><span class="line">      &gt;</span><br><span class="line">        &#123;icon&#125;</span><br><span class="line">        &lt;StyledLabel&gt;&#123;label&#125;&lt;StyledLabel/&gt;</span><br><span class="line">        &#123;isBooked &amp;&amp; &lt;FaCheckCircle/&gt;&#125;</span><br><span class="line">        &#123;hover &amp;&amp; &lt;WavingHand /&gt;&#125;</span><br><span class="line">      &lt;/StyledButton&gt;</span><br><span class="line">      &#123;openDialog &amp;&amp;</span><br><span class="line">        &lt;Dialog onClose=&#123;() =&gt; setOpenDialog(false)&#125;&gt;</span><br><span class="line">          &#123;componentInsideModal&#125;</span><br><span class="line">        &lt;/Dialog&gt;</span><br><span class="line">      &#125;&#125;</span><br><span class="line">    &lt;/&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>注意：上面的示例是我在生产中实际看到的组件的简化版本</p>
+<ul>
+<li><p>❌ View a not-so-good solution</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">const ShopCategoryTile = (&#123;</span><br><span class="line">  item,</span><br><span class="line">  offers,</span><br><span class="line">&#125;: &#123;</span><br><span class="line">  item: ItemMap;</span><br><span class="line">  offers?: Offer;</span><br><span class="line">&#125;) =&gt; &#123;</span><br><span class="line">  const dispatch = useDispatch();</span><br><span class="line">  const location = useLocation();</span><br><span class="line">  const history = useHistory();</span><br><span class="line">  const &#123; items &#125; = useContext(OrderingFormContext)</span><br><span class="line">  const [openDialog, setOpenDialog] = useState(false)</span><br><span class="line">  const [hover, setHover] = useState(false)</span><br><span class="line">  const isBooked =</span><br><span class="line">    !item.disabled &amp;&amp; !!items?.some((a: Item) =&gt; a.itemGroup === item.group)</span><br><span class="line">  const isDisabled = item.disabled || !offers</span><br><span class="line">  const RenderComponent = item.component</span><br><span class="line"></span><br><span class="line">  useEffect(() =&gt; &#123;</span><br><span class="line">    if (openDialog &amp;&amp; !location.pathname.includes(&quot;item&quot;)) &#123;</span><br><span class="line">      setOpenDialog(false)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, [location.pathname]);</span><br><span class="line">  const handleClose = useCallback(() =&gt; &#123;</span><br><span class="line">    setOpenDialog(false)</span><br><span class="line">    history.goBack()</span><br><span class="line">  &#125;, [])</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;GridStyled</span><br><span class="line">      xs=&#123;6&#125;</span><br><span class="line">      sm=&#123;3&#125;</span><br><span class="line">      md=&#123;2&#125;</span><br><span class="line">      item</span><br><span class="line">      booked=&#123;isBooked&#125;</span><br><span class="line">      disabled=&#123;isDisabled&#125;</span><br><span class="line">    &gt;</span><br><span class="line">      &lt;Tooltip</span><br><span class="line">        title=&quot;Not available&quot;</span><br><span class="line">        placement=&quot;top&quot;</span><br><span class="line">        disableFocusListener=&#123;!isDisabled&#125;</span><br><span class="line">        disableHoverListener=&#123;!isDisabled&#125;</span><br><span class="line">        disableTouchListener=&#123;!isDisabled&#125;</span><br><span class="line">      &gt;</span><br><span class="line">        &lt;PaperStyled</span><br><span class="line">          disabled=&#123;isDisabled&#125;</span><br><span class="line">          elevation=&#123;isDisabled ? 0 : hover ? 6 : 2&#125;</span><br><span class="line">        &gt;</span><br><span class="line">          &lt;Wrapper</span><br><span class="line">            onClick=&#123;() =&gt; &#123;</span><br><span class="line">              if (isDisabled) &#123;</span><br><span class="line">                return;</span><br><span class="line">              &#125;</span><br><span class="line">              dispatch(push(ORDER__PATH));</span><br><span class="line">              setOpenDialog(true);</span><br><span class="line">            &#125;&#125;</span><br><span class="line">            disabled=&#123;isDisabled&#125;</span><br><span class="line">            onMouseEnter=&#123;() =&gt; !isDisabled &amp;&amp; setHover(true)&#125;</span><br><span class="line">            onMouseLeave=&#123;() =&gt; !isDisabled &amp;&amp; setHover(false)&#125;</span><br><span class="line">          &gt;</span><br><span class="line">            &#123;item.icon&#125;</span><br><span class="line">            &lt;Typography variant=&quot;button&quot;&gt;&#123;item.label&#125;&lt;/Typography&gt;</span><br><span class="line">            &lt;CheckIconWrapper&gt;</span><br><span class="line">              &#123;isBooked &amp;&amp; &lt;FaCheckCircle size=&quot;26&quot; /&gt;&#125;</span><br><span class="line">            &lt;/CheckIconWrapper&gt;</span><br><span class="line">          &lt;/Wrapper&gt;</span><br><span class="line">        &lt;/PaperStyled&gt;</span><br><span class="line">      &lt;/Tooltip&gt;</span><br><span class="line">      &lt;Dialog fullScreen open=&#123;openDialog&#125; onClose=&#123;handleClose&#125;&gt;</span><br><span class="line">        &#123;RenderComponent &amp;&amp; (</span><br><span class="line">          &lt;RenderComponent item=&#123;item&#125; offer=&#123;offers&#125; onClose=&#123;handleClose&#125; /&gt;</span><br><span class="line">        )&#125;</span><br><span class="line">      &lt;/Dialog&gt;</span><br><span class="line">    &lt;/GridStyled&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="💖-2-4-复制比错误的抽象便宜得多"><a href="#💖-2-4-复制比错误的抽象便宜得多" class="headerlink" title="💖 2.4 复制比错误的抽象便宜得多"></a>💖 2.4 复制比错误的抽象便宜得多</h3><p>避免过早&#x2F;不恰当的概括。如果您对简单功能的实现需要大量开销，请考虑其他选项。我强烈推荐阅读<a target="_blank" rel="noopener" href="https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction">Sandi Metz：错误的抽象</a>。</p>
+<p>另外参阅： <a target="_blank" rel="noopener" href="https://kentcdodds.com/blog/aha-programming">KCD: AHA Programming</a>, <a target="_blank" rel="noopener" href="https://wiki.c2.com/?ContrivedInterfaces">C2 Wiki: Contrived Interfaces</a>&#x2F;<a target="_blank" rel="noopener" href="https://wiki.c2.com/?ExpensiveSetUpSmell">The Expensive Setup Smell</a>&#x2F;<a target="_blank" rel="noopener" href="https://wiki.c2.com/?PrematureGeneralization">Premature Generalization</a></p>
+<h2 id="🧘-3-性能提示"><a href="#🧘-3-性能提示" class="headerlink" title="🧘 3. 性能提示"></a><strong>🧘 3. 性能提示</strong></h2><blockquote>
+<p>过早的优化是万恶之源——Tony Hoare</p>
+</blockquote>
+<blockquote>
+<p>一次准确的测量胜过一千个专家的意见。- Grace Hopper</p>
+</blockquote>
+<p><strong>TL;DR</strong></p>
+<ol>
+<li><strong>如果你认为它很慢，用一个基准来证明它。</strong> <em>“面对模棱两可，拒绝猜测的诱惑。”</em> <a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi">React Developer Tools</a>（Chrome 扩展）的分析器是你的朋友！</li>
+<li>只在昂贵的计算使用<code>useMemo</code></li>
+<li>使用<code>React.memo</code>, <code>useMemo</code>, and <code>useCallback</code>为了减少重新渲染，它们不应该有很多依赖项，并且依赖项应该主要是原始类型</li>
+<li>确保您的<code>React.memo</code>, <code>useCallback</code> or <code>useMemo</code>正在做您认为正在做的事情（它真的阻止了重新渲染吗？）</li>
+<li>每次眨眼时停止打自己（在修复重渲染之前，修复缓慢的渲染）</li>
+<li>将你的state尽可能靠近它正在使用的地方，不仅会让你的代码更容易阅读，而且还会让你的应用程序更快（状态托管）</li>
+<li><code>Context</code>应该在逻辑上分开，不要在一个 context provider 添加许多值。如果您的上下文的任何值发生更改，则所有使用该 context 的组件也会重新渲染，即使这些组件不使用实际更改值。</li>
+<li>您可以通过分离<code>state</code>和<code>dispatch</code> 来优化<code>context</code></li>
+<li>了解术语<code>[lazy loading](https://nextjs.org/docs/advanced-features/dynamic-import)</code> 和 <code>[bundle/code splitting](https://reactjs.org/docs/code-splitting.html)</code></li>
+<li>将大列表置于窗口中（with <code>[tannerlinsley/react-virtual](https://github.com/tannerlinsley/react-virtual)</code> or similar）</li>
+<li>较小的包大小通常也意味着更快的应用程序。您可以使用诸如<code>[source-map-explorer](https://create-react-app.dev/docs/analyzing-the-bundle-size/)</code> 或者r <code>[@next/bundle-analyzer](https://www.npmjs.com/package/@next/bundle-analyzer)</code>（用于 NextJS）之类的工具来可视化您生成的代码包。</li>
+<li>如果您要为表单使用包，我建议您使用<code>[react-hook-forms](https://react-hook-form.com/)</code>. 我认为这是性能和开发者体验的完美平衡。</li>
+</ol>
+<ul>
+<li>查看其他KCD文章<ul>
+<li><a target="_blank" rel="noopener" href="https://kentcdodds.com/blog/state-colocation-will-make-your-react-app-faster">KCD：状态托管将使您的 React 应用程序更快</a></li>
+<li><a target="_blank" rel="noopener" href="https://kentcdodds.com/blog/usememo-and-usecallback">KCD：何时<code>useMemo</code>以及<code>useCallback</code></a></li>
+<li><a target="_blank" rel="noopener" href="https://kentcdodds.com/blog/fix-the-slow-render-before-you-fix-the-re-render">KCD：在修复重新渲染之前修复缓慢的渲染</a></li>
+<li><a target="_blank" rel="noopener" href="https://kentcdodds.com/blog/profile-a-react-app-for-performance">KCD：针对性能分析 React 应用程序</a></li>
+<li><a target="_blank" rel="noopener" href="https://kentcdodds.com/blog/how-to-optimize-your-context-value">KCD：如何优化您的上下文价值</a></li>
+<li><a target="_blank" rel="noopener" href="https://kentcdodds.com/blog/how-to-use-react-context-effectively">KCD：如何有效地使用 React Context</a></li>
+<li><a target="_blank" rel="noopener" href="https://epicreact.dev/one-react-mistake-thats-slowing-you-down">KCD：一个让你慢下来的 React 错误</a></li>
+<li><a target="_blank" rel="noopener" href="https://kentcdodds.com/blog/optimize-react-re-renders">KCD：优化 React 重新渲染的一个简单技巧</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="🧘-4-Testing-principles"><a href="#🧘-4-Testing-principles" class="headerlink" title="🧘 4. Testing principles"></a><strong>🧘 4. Testing principles</strong></h2><blockquote>
+<p>编写测试。不是很多。主要是集成。- Guillermo Rauch列尔莫·劳赫</p>
+</blockquote>
+<p><strong>TL; D</strong></p>
+<ol>
+<li>您的测试应始终类似于您的软件使用方式</li>
+<li>确保你没有测试实现细节——用户不使用、看到甚至不知道的东西</li>
+<li>如果你的测试不能让你确信你没有破坏任何东西，那么他们没有完成他们的（唯一的）任务</li>
+<li>当您在给定相同用户行为的情况下重构代码时很少需要更改测试时，您就会知道您实施了正确的测试</li>
+<li>对于前端，不需要 100% 的代码覆盖率，大约 70% 可能就足够了。测试应该让你更有效率，而不是减慢你的速度。保持测试会减慢你的速度。在某个点之后添加更多测试，您会获得逐渐减少的回报</li>
+<li>我喜欢使用<a target="_blank" rel="noopener" href="https://jestjs.io/">Jest</a>, <a target="_blank" rel="noopener" href="https://testing-library.com/docs/react-testing-library/intro/">React testing library</a>, <a target="_blank" rel="noopener" href="https://www.cypress.io/">Cypress</a>, and <a target="_blank" rel="noopener" href="https://github.com/mswjs/msw">Mock service worker</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/07/12/webgl-introduction/" rel="prev" title="webGL 入门到放弃">
+                  <i class="fa fa-angle-left"></i> webGL 入门到放弃
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/03/12/send-file-to-kindle-without-USB/" rel="next" title="不使用USB向kindle发送书">
+                  不使用USB向kindle发送书 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tbswang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"tbswang","count":false,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

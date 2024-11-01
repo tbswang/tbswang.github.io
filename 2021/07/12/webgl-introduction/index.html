@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.21.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":null,"post_header":null,"post_body":null,"coll_header":null,"sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="WebGL(Web Graphics Library)是在浏览器中渲染3D图形，并可与之交互的技术。  WebGL实现 svg vs canvas vs WebGL 一个简单的例子: 点 再来一个例子: 彩色三角形 一个复杂的例子: 立方体 为何放弃 相关的类库和参考资料">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webGL 入门到放弃">
+<meta property="og:url" content="http://yoursite.com/2021/07/12/webgl-introduction/index.html">
+<meta property="og:site_name" content="tbswang&#39;s blogs">
+<meta property="og:description" content="WebGL(Web Graphics Library)是在浏览器中渲染3D图形，并可与之交互的技术。  WebGL实现 svg vs canvas vs WebGL 一个简单的例子: 点 再来一个例子: 彩色三角形 一个复杂的例子: 立方体 为何放弃 相关的类库和参考资料">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/1.render.png">
+<meta property="og:image" content="http://yoursite.com/2.history.png">
+<meta property="og:image" content="http://yoursite.com/coord.png">
+<meta property="og:image" content="http://yoursite.com/varying.jpg">
+<meta property="og:image" content="http://yoursite.com/cube.png">
+<meta property="article:published_time" content="2021-07-12T04:21:00.000Z">
+<meta property="article:modified_time" content="2024-10-30T08:02:10.831Z">
+<meta property="article:author" content="tbswang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/1.render.png">
+
+
+<link rel="canonical" href="http://yoursite.com/2021/07/12/webgl-introduction/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://yoursite.com/2021/07/12/webgl-introduction/","path":"2021/07/12/webgl-introduction/","title":"webGL 入门到放弃"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>webGL 入门到放弃 | tbswang's blogs</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">tbswang's blogs</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#WebGL%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.</span> <span class="nav-text">WebGL的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#svg-canvas-WebGL"><span class="nav-number">2.</span> <span class="nav-text">svg &amp; canvas &amp; WebGL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E4%BE%8B%E5%AD%90-%E7%82%B9"><span class="nav-number">3.</span> <span class="nav-text">一个简单的例子: 点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%97%E8%B7%AF"><span class="nav-number">3.1.</span> <span class="nav-text">套路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WebGL%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E6%A6%82%E5%BF%B5"><span class="nav-number">4.</span> <span class="nav-text">WebGL中的一些概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9D%80%E8%89%B2%E5%99%A8"><span class="nav-number">4.1.</span> <span class="nav-text">着色器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9D%90%E6%A0%87%E7%B3%BB"><span class="nav-number">4.2.</span> <span class="nav-text">坐标系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%8D%E6%9D%A5%E4%B8%80%E4%B8%AA%E4%BE%8B%E5%AD%90-%E5%BD%A9%E8%89%B2%E4%B8%89%E8%A7%92%E5%BD%A2"><span class="nav-number">5.</span> <span class="nav-text">再来一个例子: 彩色三角形</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%9C%E8%89%B2"><span class="nav-number">6.</span> <span class="nav-text">颜色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E5%A4%8D%E6%9D%82%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-number">7.</span> <span class="nav-text">一个复杂的例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BD%95%E6%94%BE%E5%BC%83"><span class="nav-number">8.</span> <span class="nav-text">为何放弃</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E7%9A%84%E7%B1%BB%E5%BA%93%E5%92%8C%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">9.</span> <span class="nav-text">相关的类库和参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">tbswang</p>
+  <div class="site-description" itemprop="description">计算机技术</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tbswang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tbswang" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/07/12/webgl-introduction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tbswang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tbswang's blogs">
+      <meta itemprop="description" content="计算机技术">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="webGL 入门到放弃 | tbswang's blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          webGL 入门到放弃
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-07-12 12:21:00" itemprop="dateCreated datePublished" datetime="2021-07-12T12:21:00+08:00">2021-07-12</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>WebGL(Web Graphics Library)是在浏览器中渲染3D图形，并可与之交互的技术。</p>
+<ul>
+<li>WebGL实现</li>
+<li>svg vs canvas vs WebGL</li>
+<li>一个简单的例子: 点</li>
+<li>再来一个例子: 彩色三角形</li>
+<li>一个复杂的例子: 立方体</li>
+<li>为何放弃</li>
+<li>相关的类库和参考资料</li>
+</ul>
+<span id="more"></span>
+
+<hr>
+<h2 id="WebGL的实现"><a href="#WebGL的实现" class="headerlink" title="WebGL的实现"></a>WebGL的实现</h2><p><img data-src="/./1.render.png" alt="bg 80%"></p>
+<hr>
+<p><img data-src="/./2.history.png" alt="bg 80%"></p>
+<hr>
+<h2 id="svg-canvas-WebGL"><a href="#svg-canvas-WebGL" class="headerlink" title="svg &amp; canvas &amp; WebGL"></a>svg &amp; canvas &amp; WebGL</h2><table>
+<thead>
+<tr>
+<th></th>
+<th>svg</th>
+<th>canvas</th>
+<th>webgl</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2d&#x2F;3d</td>
+<td>2d</td>
+<td>2d</td>
+<td>2d + 3d</td>
+</tr>
+<tr>
+<td>交互便捷</td>
+<td>✨✨✨</td>
+<td>✨✨</td>
+<td>✨</td>
+</tr>
+<tr>
+<td>开发难度</td>
+<td>✨</td>
+<td>✨✨</td>
+<td>✨✨✨</td>
+</tr>
+<tr>
+<td>失真</td>
+<td>不失真</td>
+<td>失真</td>
+<td>失真</td>
+</tr>
+<tr>
+<td>引用图片</td>
+<td>x</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>适合场景</td>
+<td>数据较少, icon, 高保真</td>
+<td>数据较多, 复杂场景</td>
+<td>3D, 复杂场景</td>
+</tr>
+</tbody></table>
+<!-- 
+  svg例子 https://codepen.io/arcticben/pen/zZaRqQ
+  canvas例子 https://codepen.io/arcticben/pen/OWYyeo
+-->
+
+<hr>
+<h2 id="一个简单的例子-点"><a href="#一个简单的例子-点" class="headerlink" title="一个简单的例子: 点"></a>一个简单的例子: 点</h2><p>查看代码: <code>HelloPoint.html</code></p>
+<h3 id="套路"><a href="#套路" class="headerlink" title="套路"></a>套路</h3><ol>
+<li>定义着色器</li>
+<li>绑定数据</li>
+<li>绑定交互事件</li>
+</ol>
+<hr>
+<h2 id="WebGL中的一些概念"><a href="#WebGL中的一些概念" class="headerlink" title="WebGL中的一些概念"></a>WebGL中的一些概念</h2><h3 id="着色器"><a href="#着色器" class="headerlink" title="着色器"></a>着色器</h3><p>  顶点着色器：描述点的特性, 大小和位置<br>  片元着色器：逐个片元(像素)处理, 颜色</p>
+<!--
+  要使用webgl必须使用着色器, 在js中以字符串的形式声明
+  着色器有两种
+  实际是一种叫做glsl es的语言
+-->
+
+<hr>
+<h3 id="坐标系"><a href="#坐标系" class="headerlink" title="坐标系"></a>坐标系</h3><p><img data-src="/./coord.png" alt="bg 50%"></p>
+<!-- 
+  canvas中坐标系是二维的, 左上角为(0,0)
+  WebGL中的坐标系是三维的, 坐标原点在中间. 右手坐标系
+-->
+
+<hr>
+<h2 id="再来一个例子-彩色三角形"><a href="#再来一个例子-彩色三角形" class="headerlink" title="再来一个例子: 彩色三角形"></a>再来一个例子: 彩色三角形</h2><p>查看代码: <code>ColorTriangle.html</code></p>
+<hr>
+<h2 id="颜色"><a href="#颜色" class="headerlink" title="颜色"></a>颜色</h2><p><img data-src="/./varying.jpg" alt="bg 80%"></p>
+<hr>
+<h2 id="一个复杂的例子"><a href="#一个复杂的例子" class="headerlink" title="一个复杂的例子"></a>一个复杂的例子</h2><p><code>HelloCube.html</code></p>
+<p><img data-src="/./cube.png" alt="bg 50%"></p>
+<hr>
+<h2 id="为何放弃"><a href="#为何放弃" class="headerlink" title="为何放弃"></a>为何放弃</h2><p><code>ThreejsCube.html</code></p>
+<p><strong>开发效率</strong></p>
+<hr>
+<h2 id="相关的类库和参考资料"><a href="#相关的类库和参考资料" class="headerlink" title="相关的类库和参考资料"></a>相关的类库和参考资料</h2><ul>
+<li>three.js</li>
+<li>deck.gl</li>
+<li>babylon.js</li>
+<li><a target="_blank" rel="noopener" href="https://gist.github.com/dmnsgn/76878ba6903cf15789b712464875cfdc">so on</a></li>
+</ul>
+<p>webgl编程指南<br>mdn文档</p>
+<blockquote>
+<p>相关代码： <a target="_blank" rel="noopener" href="https://github.com/tbswang/webgl-learn">https://github.com/tbswang/webgl-learn</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/06/24/mapbox-gl-0/" rel="prev" title="mapbox-gl源码—第0回浅尝辄止">
+                  <i class="fa fa-angle-left"></i> mapbox-gl源码—第0回浅尝辄止
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/11/16/react-philosophies-cn/" rel="next" title="react哲学">
+                  react哲学 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tbswang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"tbswang","count":false,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yoursite.com","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.21.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":null,"post_header":null,"post_body":null,"coll_header":null,"sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Abstract本文介绍软件测试中经典问题nextdate的延伸–nextNDate, 以及记录使用nodejs引入mocha单元测试模块, 并且使用istanbul输出测试用例的覆盖率.其中测试用例又excel表格给出.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nodejs使用mocha输出测试结果和使用istanbul输出覆盖率">
+<meta property="og:url" content="http://yoursite.com/2017/12/03/mocha-istanbul/index.html">
+<meta property="og:site_name" content="tbswang&#39;s blogs">
+<meta property="og:description" content="Abstract本文介绍软件测试中经典问题nextdate的延伸–nextNDate, 以及记录使用nodejs引入mocha单元测试模块, 并且使用istanbul输出测试用例的覆盖率.其中测试用例又excel表格给出.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/flow_chart.png">
+<meta property="article:published_time" content="2017-12-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-10-30T08:02:10.786Z">
+<meta property="article:author" content="tbswang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/flow_chart.png">
+
+
+<link rel="canonical" href="http://yoursite.com/2017/12/03/mocha-istanbul/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://yoursite.com/2017/12/03/mocha-istanbul/","path":"2017/12/03/mocha-istanbul/","title":"nodejs使用mocha输出测试结果和使用istanbul输出覆盖率"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>nodejs使用mocha输出测试结果和使用istanbul输出覆盖率 | tbswang's blogs</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">tbswang's blogs</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract"><span class="nav-number">1.</span> <span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-number">2.</span> <span class="nav-text">前置知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4"><span class="nav-number">3.</span> <span class="nav-text">步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nextNdate%E9%97%AE%E9%A2%98"><span class="nav-number">3.1.</span> <span class="nav-text">nextNdate问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8mocha%E8%BF%9B%E8%A1%8C%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95"><span class="nav-number">3.2.</span> <span class="nav-text">使用mocha进行单元测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8istanbul%E6%98%BE%E7%A4%BA%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E7%9A%84%E8%A6%86%E7%9B%96%E7%8E%87"><span class="nav-number">3.3.</span> <span class="nav-text">使用istanbul显示测试用例的覆盖率.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.4.</span> <span class="nav-text">测试用例的设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8js-xlsx%E8%AF%BB%E5%8F%96%E5%AD%98%E6%94%BE%E5%9C%A8%E8%A1%A8%E6%A0%BC%E4%B8%AD%E7%9A%84%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B"><span class="nav-number">3.5.</span> <span class="nav-text">使用js-xlsx读取存放在表格中的测试用例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8node-xlsx%E5%B0%86%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C%E8%BE%93%E5%87%BA%E5%88%B0%E8%A1%A8%E6%A0%BC%E4%B8%AD"><span class="nav-number">3.6.</span> <span class="nav-text">使用node-xlsx将测试结果输出到表格中.</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E7%BB%AD%E5%AD%A6%E4%B9%A0"><span class="nav-number">5.</span> <span class="nav-text">后续学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E5%92%8C%E8%AF%B4%E6%98%8E"><span class="nav-number">6.</span> <span class="nav-text">参考文献和说明</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">tbswang</p>
+  <div class="site-description" itemprop="description">计算机技术</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tbswang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tbswang" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/03/mocha-istanbul/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tbswang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tbswang's blogs">
+      <meta itemprop="description" content="计算机技术">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="nodejs使用mocha输出测试结果和使用istanbul输出覆盖率 | tbswang's blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          nodejs使用mocha输出测试结果和使用istanbul输出覆盖率
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-12-03 00:00:00" itemprop="dateCreated datePublished" datetime="2017-12-03T00:00:00+08:00">2017-12-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B5%8B%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">测试</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>本文介绍软件测试中经典问题nextdate的延伸–nextNDate, 以及记录使用nodejs引入mocha单元测试模块, 并且使用istanbul输出测试用例的覆盖率.其中测试用例又excel表格给出.</p>
+<span id="more"></span>
+
+<h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><ul>
+<li>软件测试理论</li>
+<li>js基础语法</li>
+</ul>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="nextNdate问题"><a href="#nextNdate问题" class="headerlink" title="nextNdate问题"></a>nextNdate问题</h3><p>nextdate问题是指,给出一个日期date, 可以得到第二天的日期. 而nextNDate是指给出一个date, 获得n天之后的日期.核心思路是将nextdate循环n次就可以得到nextNdate的日期.</p>
+<p>但是,在1582年10月5-14,这十天是没有的;少了十天,特别的, 英国此时没少, 在1752.9.2- 14,少了11天<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/54650391">[1]</a>; 而且, 对于公元前的闰年的计算方法, 也有不同的方法.这里采用维基百科的计算方法.公元之前的闰年, 要用年份值减去1, 在去除以4.<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%97%B0%E5%B9%B4">[2]</a>此外, 在公历中是没有公元0年的概念, 公元1年的前一年是公元前1年.从数学上理解是没有整数0.<a target="_blank" rel="noopener" href="https://zhidao.baidu.com/question/14299912.html">[3]</a></p>
+<p>另外, 在javascript中可以使用内置的date类型来实现加减天数, 只需要在date中加减24*60*60*1000就可以.<a target="_blank" rel="noopener" href="http://yuanliyin.iteye.com/blog/653456">[4]</a>但是date类型数据没有对1582的时间进行处理.</p>
+<p>实现的思路是, 根据N的正负, 分别调用afterNDate和beforeNDate. 对于afterNDate, 再去调用afterDate. 在afterDate里面, 将输入的date的与这个月的天数进行比较, 来判断是不是要把月份进位或者年份进位;这个月的天数无外乎31, 30, 28, 29这几种情况, 使用一个分支语句就可以简单的得到.对于beforeNDate同样的处理. 详细可以看代码.<a target="_blank" rel="noopener" href="https://github.com/gt2017/nextNDate">[5]</a>和下面的流程图.<br><img data-src="/flow_chart.png" alt="img"></p>
+<h3 id="使用mocha进行单元测试"><a href="#使用mocha进行单元测试" class="headerlink" title="使用mocha进行单元测试"></a>使用mocha进行单元测试</h3><p>mocha使用的很简单, 读一下阮大大的博客<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2015/12/a-mocha-tutorial-of-examples.html">[6]</a>,把里面的demo实现一下就可以.</p>
+<h3 id="使用istanbul显示测试用例的覆盖率"><a href="#使用istanbul显示测试用例的覆盖率" class="headerlink" title="使用istanbul显示测试用例的覆盖率."></a>使用istanbul显示测试用例的覆盖率.</h3><p>同样, 也是阮大大的博客<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2015/06/istanbul.html">[7]</a></p>
+<p>需要注意是在windos系统使用:</p>
+<p>在window系统上因为路径的原因，不能使用 <code>istanbul cover _mocha </code>命令，而要使用<code> istanbul cover node_modules/mocha/bin/_mocha </code>, 官方说明上 usage on windows 部分也提到了这一点。<br>此外, 由于在个例子中的有部分测试用例(比方说,N到了十万或者百万)耗时比较长,这可能是js的性能问题, 旁边java的同学马上就可以结果.orz. </p>
+<p>如果一个用例时间太长, mocha就认为这个测试失败, mocha的默认时间是2000ms, 可以在通过添加调用参数来修改: </p>
+<p><code>istanbul cover node_modules/mocha/bin/_mocha -- -t 100000 ./test/nextNDate.test.js</code></p>
+<h3 id="测试用例的设计"><a href="#测试用例的设计" class="headerlink" title="测试用例的设计"></a>测试用例的设计</h3><p>对于单元测试, 分为白盒测试和黑盒测试. 所谓黑盒测试, 就是把代码看做一个黑盒, 在外部进行输入, 比较输出是否和预期相同.这属于动态测试. 而对于白盒测试, 分为静态测试, 比如代码走查,和动态测试.</p>
+<p>用例要有非法的输入, 比如日期选择在1582&#x2F;10&#x2F;10,这一天在代码中应该是不存在的一天; 而N 的输入可以是非数字的.还有一个情况, 输入的日期中, 有字符串格式, 比如”2010&#x2F;“20&#x2F;20”,类似于sql注入的情况.</p>
+<p>如果N的值太大, 导致超出时间测试失败, 可以参考3.3的设计测试的时间.</p>
+<h3 id="使用js-xlsx读取存放在表格中的测试用例"><a href="#使用js-xlsx读取存放在表格中的测试用例" class="headerlink" title="使用js-xlsx读取存放在表格中的测试用例"></a>使用js-xlsx读取存放在表格中的测试用例</h3><p>excel表格存放测试用例确实不是一个好方法. 表格中的日期格式在微软的excel会自动处理成日期格式. 这样会导致js-xlsx读取出来的数据和看到的数据不一致, 这个问题在mac的表格也会出现. 解决办法可以在excel中使用text函数,把日期格式转换为文本格式, 注意转换的时候确定好’yyyy&#x2F;mm&#x2F;dd’格式还是’yyyy&#x2F;m&#x2F;d’格式, 前面的格式有0, 后面的没有0.比如前者显示2001&#x2F;01&#x2F;01, 后面显示2001&#x2F;1&#x2F;1.</p>
+<p>js-xlsx的使用, 直接参照官方文档<a target="_blank" rel="noopener" href="https://github.com/SheetJS/js-xlsx">[8]</a>, 使用非常简单.其中sheet_to_json这个方法可以把表格数据导出为json格式, 非常适合js.</p>
+<h3 id="使用node-xlsx将测试结果输出到表格中"><a href="#使用node-xlsx将测试结果输出到表格中" class="headerlink" title="使用node-xlsx将测试结果输出到表格中."></a>使用node-xlsx将测试结果输出到表格中.</h3><p>使用输出重定向,把默认在控制台中打印信息写入到log文件中, 从log文件中使用正则匹配取得测试的覆盖率结果, 写入到excel表格中.</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这是上完测试课之后大作业. 用到的测试的原理比较简单, 无非是设计出尽量全面的用例.主要的精力用在如何用js实现代码.以及选择合适的代码库.</p>
+<p>留下的教训:</p>
+<ol>
+<li>团队合作, 一定要有相互之间交流的通用的标准.比方说前后台交互数据使用统一的json格式. 这里是excel表格单元格样式都设置为日期样式或者文本样式, 这样才不会改来改去.</li>
+</ol>
+<h2 id="后续学习"><a href="#后续学习" class="headerlink" title="后续学习"></a>后续学习</h2><ol>
+<li>在写代码的过程中, 对js的全局变量和局部变量的使用不熟练, 应该继续看书.顺便可以把闭包研究一下.</li>
+<li>关于测试的理论, 继续看教材学习</li>
+<li>在3.4中”2010&#x2F;“20&#x2F;20”这种情况还没想到好办法.</li>
+<li>BDD和TDD两种开发方式如何选择. 至少需要有经验的人来了解一下.</li>
+<li>nodejs关于文件和流, 忘干净了.</li>
+</ol>
+<h2 id="参考文献和说明"><a href="#参考文献和说明" class="headerlink" title="参考文献和说明"></a>参考文献和说明</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/54650391">https://www.zhihu.com/question/54650391</a> ;</li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%97%B0%E5%B9%B4">https://zh.wikipedia.org/wiki/%E9%97%B0%E5%B9%B4</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhidao.baidu.com/question/14299912.html">https://zhidao.baidu.com/question/14299912.html</a></li>
+<li><a target="_blank" rel="noopener" href="http://yuanliyin.iteye.com/blog/653456">http://yuanliyin.iteye.com/blog/653456</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/gt2017/nextNDate">https://github.com/gt2017/nextNDate</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2015/12/a-mocha-tutorial-of-examples.html">http://www.ruanyifeng.com/blog/2015/12/a-mocha-tutorial-of-examples.html</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2015/06/istanbul.html">http://www.ruanyifeng.com/blog/2015/06/istanbul.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/SheetJS/js-xlsx">https://github.com/SheetJS/js-xlsx</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/04/20/rsa/" rel="next" title="rsa的公钥加密私钥解密过程">
+                  rsa的公钥加密私钥解密过程 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tbswang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"tbswang","count":false,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
